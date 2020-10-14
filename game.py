@@ -24,7 +24,7 @@ momentum_limit = 20.0
 player_y_momentum = -momentum_limit
 player_collision_rect = pygame.Rect(player_pos[0], player_pos[1], player.get_width(), player.get_height())
 
-test_object_rect = pygame.Rect((GAME_WIDTH_SCREEN - 550) / 2, (GAME_HEIGHT_SCREEN - 100) / 2, 550, 100)
+test_object_rect = pygame.Rect(int((GAME_WIDTH_SCREEN - 550) / 2), int((GAME_HEIGHT_SCREEN - 100) / 2), 550, 100)
 test_object_color = BLACK_COLOR
 
 # keys for arrows (LEFT, RIGHT, TOP, BOTTOM)
@@ -124,11 +124,13 @@ def main():
 		# ---------------------------------------------------------------------
 		#  TEST ENTITIES COLLISION
 		# ---------------------------------------------------------------------
+		player_collision_rect.x = int(player_pos[0])
+		player_collision_rect.y = int(player_pos[1])
+
+		# test if two rectangles overlap
 		if player_collision_rect.colliderect(test_object_rect):
-			print("COLLISION OK")
 			test_object_color = RED_COLOR
 		else:
-			print("COLLISION NOOOOT OK")
 			test_object_color = BLACK_COLOR
 
 		# ---------------------------------------------------------------------
@@ -140,7 +142,8 @@ def main():
 		#  DRAW FRAME
 		# ---------------------------------------------------------------------
 		pygame.draw.rect(screen, test_object_color, test_object_rect)
-		screen.blit(player, player_pos)
+
+		screen.blit(player, (int(player_pos[0]), int(player_pos[1])))
 		# screen.blit(text, (5, 10))
 
 		# update portions of the screen for software displays
