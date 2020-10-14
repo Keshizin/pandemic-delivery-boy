@@ -15,9 +15,17 @@ pygame.init()
 GAME_WIDTH_SCREEN = 1100
 GAME_HEIGHT_SCREEN = 800
 
+RED_COLOR = (255,0,0)
+BLACK_COLOR = (0,0,0)
+
 player = pygame.image.load('assets/player.png')
-player_pos = [0, 0]
-player_y_momentum = 0
+player_pos = [0, GAME_HEIGHT_SCREEN - player.get_height()]
+momentum_limit = 20.0
+player_y_momentum = -momentum_limit
+player_collision_rect = pygame.Rect(player_pos[0], player_pos[1], player.get_width(), player.get_height())
+
+test_object_rect = pygame.Rect((GAME_WIDTH_SCREEN - 550) / 2, (GAME_HEIGHT_SCREEN - 100) / 2, 550, 100)
+test_object_color = BLACK_COLOR
 
 # keys for arrows (LEFT, RIGHT, TOP, BOTTOM)
 keys = [False, False, False, False]
@@ -107,11 +115,21 @@ def main():
 		#  UPDATE OBJECTS ATTRIBUTES
 		# ---------------------------------------------------------------------
 		if player_pos[1] > GAME_HEIGHT_SCREEN - player.get_height():
-			player_y_momentum = -player_y_momentum
+			player_y_momentum = -momentum_limit
 		else:
 			player_y_momentum += 0.5
-		
+
 		player_pos[1] += player_y_momentum
+
+		# ---------------------------------------------------------------------
+		#  TEST ENTITIES COLLISION
+		# ---------------------------------------------------------------------
+		if player_collision_rect.colliderect(test_object_rect):
+			print("COLLISION OK")
+			test_object_color = RED_COLOR
+		else:
+			print("COLLISION NOOOOT OK")
+			test_object_color = BLACK_COLOR
 
 		# ---------------------------------------------------------------------
 		#  CLEAR SCREEN
@@ -121,6 +139,7 @@ def main():
 		# ---------------------------------------------------------------------
 		#  DRAW FRAME
 		# ---------------------------------------------------------------------
+		pygame.draw.rect(screen, test_object_color, test_object_rect)
 		screen.blit(player, player_pos)
 		# screen.blit(text, (5, 10))
 
@@ -129,6 +148,8 @@ def main():
 
 		# update the full display Surface to the screen
 		pygame.display.flip()
+
+		clock.tick(60)
 
 if __name__ == '__main__':
 	main()
