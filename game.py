@@ -23,7 +23,9 @@ BLACK_COLOR = (0,0,0)
 # -----------------------------------------------------------------------------
 #  GAME - GLOBAL SCOPE
 # -----------------------------------------------------------------------------
-player = pygame.image.load('assets/player.png')
+player = pygame.image.load('assets/player32.png')
+player.set_colorkey((255,255,255))
+
 # player_pos = [0, GAME_HEIGHT_SCREEN - player.get_height()]
 player_pos = [0, 0]
 momentum_limit = 20.0
@@ -78,6 +80,26 @@ def main():
 
 	# criando uma Surface menor para aumentar o desempenho
 	display = pygame.Surface((300,200))
+
+	# 
+	tile_rects = []
+	y = 0
+
+	for layer in game_map:
+		x = 0
+		for tile in layer:
+
+			# if tile == '1':
+				# display.blit(dirt_img, (x * 16, y * 16))
+
+			# if tile == '2':
+				# display.blit(grass_img, (x * 16, y * 16))
+
+			if tile != '0':
+				tile_rects.append(pygame.Rect(x * 16, y * 16, 16, 16))
+
+			x += 1
+		y += 1
 
 	# -------------------------------------------------------------------------
 	#  GAME LOOP
@@ -167,7 +189,6 @@ def main():
 		# ---------------------------------------------------------------------
 		#  DRAW GAME MAP
 		# ---------------------------------------------------------------------
-		tile_rects = []
 		y = 0
 
 		for layer in game_map:
@@ -176,10 +197,9 @@ def main():
 	
 				if tile == '1':
 					display.blit(dirt_img, (x * 16, y * 16))
+
 				if tile == '2':
 					display.blit(grass_img, (x * 16, y * 16))
-				if tile != '0':
-					tile_rects.append(pygame.Rect(x * 16, y * 16, 16, 16))
 
 				x += 1
 			y += 1
