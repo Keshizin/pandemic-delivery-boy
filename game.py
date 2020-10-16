@@ -14,10 +14,15 @@ pygame.init()
 # my game screen resolution
 GAME_WIDTH_SCREEN = 1100
 GAME_HEIGHT_SCREEN = 800
+# GAME_WIDTH_SCREEN = 1216 # 19 x 64
+# GAME_HEIGHT_SCREEN = 832 # 13 x 64
 
 RED_COLOR = (255,0,0)
 BLACK_COLOR = (0,0,0)
 
+# -----------------------------------------------------------------------------
+#  GAME - GLOBAL SCOPE
+# -----------------------------------------------------------------------------
 player = pygame.image.load('assets/player.png')
 player_pos = [0, GAME_HEIGHT_SCREEN - player.get_height()]
 momentum_limit = 20.0
@@ -32,6 +37,23 @@ keys = [False, False, False, False]
 
 # font = pygame.font.Font('freesansbold.ttf', 15)
 # text = font.render('Seu texto aqui', True, RED, WHITE)
+
+game_map = [['0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0'],
+            ['0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0'],
+            ['0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0'],
+            ['0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0'],
+            ['0','0','0','0','0','0','0','2','2','2','2','2','0','0','0','0','0','0','0'],
+            ['0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0'],
+            ['2','2','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','2','2'],
+            ['1','1','2','2','2','2','2','2','2','2','2','2','2','2','2','2','2','1','1'],
+            ['1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1'],
+            ['1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1'],
+            ['1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1'],
+            ['1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1'],
+            ['1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1']]
+
+grass_img = pygame.image.load('assets/grass.png')
+dirt_img = pygame.image.load('assets/dirt.png')
 
 # -----------------------------------------------------------------------------
 #  MAIN
@@ -52,6 +74,9 @@ def main():
 
 	# initialize a window or screen for display - SURFACE CREATION HERE!
 	screen = pygame.display.set_mode((GAME_WIDTH_SCREEN, GAME_HEIGHT_SCREEN), 0, 32)
+
+	# criando uma Surface menor para aumentar o desempenho
+	display = pygame.Surface((300,200))
 
 	# -------------------------------------------------------------------------
 	#  GAME LOOP
@@ -136,23 +161,45 @@ def main():
 		# ---------------------------------------------------------------------
 		#  CLEAR SCREEN
 		# ---------------------------------------------------------------------
-		screen.fill(COLOR_AQUA_BLUE)
+		display.fill(COLOR_AQUA_BLUE)
+
+		# ---------------------------------------------------------------------
+		#  DRAW GAME MAP
+		# ---------------------------------------------------------------------
+		# tile_rects = []
+		# y = 0
+
+		# for layer in game_map:
+		# 	x = 0
+		# 	for tile in layer:
+	
+		# 		if tile == '1':
+		# 			display.blit(dirt_img, (x * 16, y * 16))
+		# 		if tile == '2':
+		# 			display.blit(grass_img, (x * 16, y * 16))
+		# 		if tile != '0':
+		# 			tile_rects.append(pygame.Rect(x * 16, y * 16, 16, 16))
+
+		# 		x += 1
+		# 	y += 1
 
 		# ---------------------------------------------------------------------
 		#  DRAW FRAME
 		# ---------------------------------------------------------------------
-		pygame.draw.rect(screen, test_object_color, test_object_rect)
+		# pygame.draw.rect(display, test_object_color, test_object_rect)
 
-		screen.blit(player, (int(player_pos[0]), int(player_pos[1])))
+		display.blit(player, (int(player_pos[0]), int(player_pos[1])))
 		# screen.blit(text, (5, 10))
-
+		
+		screen.blit(pygame.transform.scale(display, (GAME_WIDTH_SCREEN, GAME_HEIGHT_SCREEN)),(0,0))
+		
 		# update portions of the screen for software displays
 		# pygame.display.update()
 
 		# update the full display Surface to the screen
 		pygame.display.flip()
 
-		clock.tick(60)
+		clock.tick(120)
 
 if __name__ == '__main__':
 	main()
