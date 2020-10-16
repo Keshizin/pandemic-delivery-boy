@@ -24,7 +24,8 @@ BLACK_COLOR = (0,0,0)
 #  GAME - GLOBAL SCOPE
 # -----------------------------------------------------------------------------
 player = pygame.image.load('assets/player.png')
-player_pos = [0, GAME_HEIGHT_SCREEN - player.get_height()]
+# player_pos = [0, GAME_HEIGHT_SCREEN - player.get_height()]
+player_pos = [0, 0]
 momentum_limit = 20.0
 player_y_momentum = -momentum_limit
 player_collision_rect = pygame.Rect(player_pos[0], player_pos[1], player.get_width(), player.get_height())
@@ -139,12 +140,12 @@ def main():
 		# ---------------------------------------------------------------------
 		#  UPDATE OBJECTS ATTRIBUTES
 		# ---------------------------------------------------------------------
-		if player_pos[1] > GAME_HEIGHT_SCREEN - player.get_height():
-			player_y_momentum = -momentum_limit
-		else:
-			player_y_momentum += 0.5
+		# if player_pos[1] > GAME_HEIGHT_SCREEN - player.get_height():
+		# 	player_y_momentum = -momentum_limit
+		# else:
+		# 	player_y_momentum += 0.5
 
-		player_pos[1] += player_y_momentum
+		# player_pos[1] += player_y_momentum
 
 		# ---------------------------------------------------------------------
 		#  TEST ENTITIES COLLISION
@@ -166,22 +167,22 @@ def main():
 		# ---------------------------------------------------------------------
 		#  DRAW GAME MAP
 		# ---------------------------------------------------------------------
-		# tile_rects = []
-		# y = 0
+		tile_rects = []
+		y = 0
 
-		# for layer in game_map:
-		# 	x = 0
-		# 	for tile in layer:
+		for layer in game_map:
+			x = 0
+			for tile in layer:
 	
-		# 		if tile == '1':
-		# 			display.blit(dirt_img, (x * 16, y * 16))
-		# 		if tile == '2':
-		# 			display.blit(grass_img, (x * 16, y * 16))
-		# 		if tile != '0':
-		# 			tile_rects.append(pygame.Rect(x * 16, y * 16, 16, 16))
+				if tile == '1':
+					display.blit(dirt_img, (x * 16, y * 16))
+				if tile == '2':
+					display.blit(grass_img, (x * 16, y * 16))
+				if tile != '0':
+					tile_rects.append(pygame.Rect(x * 16, y * 16, 16, 16))
 
-		# 		x += 1
-		# 	y += 1
+				x += 1
+			y += 1
 
 		# ---------------------------------------------------------------------
 		#  DRAW FRAME
@@ -190,7 +191,7 @@ def main():
 
 		display.blit(player, (int(player_pos[0]), int(player_pos[1])))
 		# screen.blit(text, (5, 10))
-		
+
 		screen.blit(pygame.transform.scale(display, (GAME_WIDTH_SCREEN, GAME_HEIGHT_SCREEN)),(0,0))
 		
 		# update portions of the screen for software displays
