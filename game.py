@@ -35,9 +35,6 @@ momentum_limit = 20.0
 player_y_momentum = -momentum_limit
 player_collision_rect = pygame.Rect(player_pos[0], player_pos[1], player.get_width(), player.get_height())
 
-test_object_rect = pygame.Rect(int((GAME_WIDTH_SCREEN - 550) / 2), int((GAME_HEIGHT_SCREEN - 100) / 2), 550, 100)
-test_object_color = BLACK_COLOR
-
 # keys for arrows (LEFT, RIGHT, TOP, BOTTOM)
 keys = [False, False, False, False]
 
@@ -82,6 +79,7 @@ def main():
 	print("Pandemic Delivery Game")
 
 	global player_y_momentum
+	global player_collision_rect
 
 	# create an object to help track time
 	clock = pygame.time.Clock()
@@ -172,7 +170,7 @@ def main():
 		
 		if keys[3]:
 			player_input[1] = 1
-			player_pos[1] += 1	
+			player_pos[1] += 1
 
 		# ---------------------------------------------------------------------
 		#  UPDATE OBJECTS ATTRIBUTES
@@ -191,6 +189,7 @@ def main():
 		player_collision_rect.y = int(player_pos[1])
 
 		# TEST COLLISION WITH TILES
+		print("test collision")
 		for tile in tile_rects:
 			if player_collision_rect.colliderect(tile):
 
@@ -200,19 +199,15 @@ def main():
 				elif player_input[0] < 0:
 					print("LEFT")
 					player_pos[0] = tile[0] + tile[2]
-
-				if player_input[1] > 0:
+			
+				elif player_input[1] > 0:
 					print("BOTTOM")
 					player_pos[1] = tile[1] - player_collision_rect.height
 				elif player_input[1] < 0:
 					print("TOP")
 					player_pos[1] = tile[1] + tile[3]
-
-		# test if two rectangles overlap
-		if player_collision_rect.colliderect(test_object_rect):
-			test_object_color = RED_COLOR
-		else:
-			test_object_color = BLACK_COLOR
+		print("end detection")
+		print()
 
 		# ---------------------------------------------------------------------
 		#  CLEAR SCREEN
