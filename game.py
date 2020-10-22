@@ -25,9 +25,9 @@ BLACK_COLOR = (0,0,0)
 # -----------------------------------------------------------------------------
 #  GAME - GLOBAL SCOPE
 # -----------------------------------------------------------------------------
-# player = pygame.image.load('assets/test.png')
-player = pygame.image.load('assets/player32.png')
-player.set_colorkey((255,255,255))
+player = pygame.image.load('assets/test.png')
+# player = pygame.image.load('assets/player32.png')
+# player.set_colorkey((255,255,255))
 
 # player_pos = [0, GAME_HEIGHT_SCREEN - player.get_height()]
 player_pos = [0, 0]
@@ -182,51 +182,43 @@ def main():
 		# ---------------------------------------------------------------------
 		#  TESTE DE COLISÃO DE OBJETOS
 		# ---------------------------------------------------------------------
-		# atualiza o retangulo de colisão do personagem
-		player_collision_rect.x = int(player_pos[0]) + player_movement[0]
-		player_collision_rect.y = int(player_pos[1]) + player_movement[1]
-
-		# TEST COLLISION WITH TILES
 		temp = [0, 0]
+		
+		# TESTE DE COLISÃO COM OS TILES
+
+		# VERIFICAÇÃO DE COLISÃO NO EIXO X
+		player_collision_rect.x = int(player_pos[0]) + player_movement[0]
 		temp[0] = player_collision_rect.x
-		temp[1] = player_collision_rect.y
 
 		for tile in tile_rects:
 			if player_collision_rect.colliderect(tile):
-				print("tile: " + str(tile))
-				print("player x: " + str(player_collision_rect.x))
-				print("player y: " + str(player_collision_rect.y))
-
 				if player_movement[0] > 0:
-					print("RIGHT")
+					# print("RIGHT")
 					temp[0] = tile[0] - player_collision_rect.width
 					player_collision_rect.x = temp[0]
-					player_movement[0] = 0
-
 				elif player_movement[0] < 0:
-					print("LEFT")
+					# print("LEFT")
 					temp[0] = tile[0] + tile[2]
 					player_collision_rect.x = temp[0]
-					player_movement[0] = 0
 
-				elif player_movement[1] > 0:
-					print("TOP")
+		# VERIFICAÇÃO DE COLISÃO NO EIXO Y
+		player_collision_rect.y = int(player_pos[1]) + player_movement[1]
+		temp[1] = player_collision_rect.y
+
+		hit_list = []
+		for tile in tile_rects:
+			if player_collision_rect.colliderect(tile):
+				if player_movement[1] > 0:
+					# print("TOP")
 					temp[1] = tile[1] - player_collision_rect.height
 					player_collision_rect.y = temp[1]
-					player_movement[1] = 0
-
 				elif player_movement[1] < 0:
-					print("BOTTOM")
+					# print("BOTTOM")
 					temp[1] = tile[1] + tile[3]
 					player_collision_rect.y = temp[1]
-					player_movement[1] = 0
-
-				print()
 
 		player_pos[0] = temp[0]
 		player_pos[1] = temp[1]
-
-
 
 		# ---------------------------------------------------------------------
 		#  CLEAR SCREEN
