@@ -173,7 +173,6 @@ def main():
 	
 		if keys[2]:
 			if air == False:
-				# player_movement[1] = -1
 				air = True
 				player_y_momentum = -momentum_limit
 		
@@ -218,6 +217,7 @@ def main():
 		for tile in tile_rects:
 			if player_collision_rect.colliderect(tile):
 				if player_movement[1] > 0:
+					# print("BOTTOM")
 					temp[1] = tile[1] - player_collision_rect.height
 					player_collision_rect.y = temp[1]
 
@@ -225,8 +225,11 @@ def main():
 					player_y_momentum = 0
 
 				elif player_movement[1] < 0:
+					# print("TOP")
 					temp[1] = tile[1] + tile[3]
 					player_collision_rect.y = temp[1]
+			
+					player_y_momentum = 0
 
 		player_pos[0] = temp[0]
 		player_pos[1] = temp[1]
