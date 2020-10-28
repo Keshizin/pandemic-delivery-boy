@@ -62,7 +62,12 @@ game_map = [['0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0'
 
 boxo_img = pygame.image.load('assets/boxo.png')
 boxc_img = pygame.image.load('assets/boxc.png')
-bkg_1_img = pygame.image.load('assets/bkg.png')
+
+bkg_1_img = pygame.image.load('assets/bkg1.png')
+bkg_2_img = pygame.image.load('assets/bkg2.png')
+
+bkgs = bkg_1_img
+map_region = 1
 
 # -----------------------------------------------------------------------------
 #  MAIN
@@ -75,6 +80,8 @@ def main():
 	global momentum_speed
 	global player_collision_rect
 	global true_scroll
+	global bkgs
+	global map_region
 
 	# create an object to help track time
 	clock = pygame.time.Clock()
@@ -146,7 +153,11 @@ def main():
 					keys[2] = False
 				if event.key == K_DOWN:
 					keys[3] = False
-		
+				# if event.key == K_1:
+				# 	bkgs = bkg_1_img
+				# if event.key == K_2:
+				# 	bkgs = bkg_2_img
+
 		# ---------------------------------------------------------------------
 		#  PLAYER INPUT
 		# ---------------------------------------------------------------------
@@ -178,12 +189,105 @@ def main():
 		# 	player_y_momentum = 3
 
 		# ---------------------------------------------------------------------
+		#  TESTE DE COLISÃO AS BORDAS DA TELA
+		# ---------------------------------------------------------------------
+		if map_region == 1:
+			if player_pos[0] + player_movement[0] > 304:
+				bkgs = bkg_2_img
+				map_region = 2
+				player_pos[0] = 0
+				player_movement[0] = 0
+			elif player_pos[0] + player_movement[0] < 0:
+				bkgs = bkg_1_img
+				map_region = 1
+				player_pos[0] = 0
+				player_movement[0] = 0
+
+			if player_pos[1] + player_movement[1] > 192:
+				bkgs = bkg_2_img
+				map_region = 3
+				player_pos[1] = 0
+				player_movement[1] = 0
+			elif player_pos[1] + player_movement[1] < 0:
+				bkgs = bkg_1_img
+				map_region = 1
+				player_pos[1] = 0
+				player_movement[1] = 0
+
+		elif map_region == 2:
+			if player_pos[0] + player_movement[0] + player.get_width() > 304:
+				bkgs = bkg_2_img
+				map_region = 2
+				player_pos[0] = 304 - player.get_width()
+				player_movement[0] = 0
+			elif player_pos[0] + player_movement[0] + player.get_width() < 0:
+				bkgs = bkg_1_img
+				map_region = 1
+				player_pos[0] = 304 - player.get_width()
+				player_movement[0] = 0
+
+			if player_pos[1] + player_movement[1] > 192:
+				bkgs = bkg_1_img
+				map_region = 4
+				player_pos[1] = 0
+				player_movement[1] = 0
+			elif player_pos[1] + player_movement[1] < 0:
+				bkgs = bkg_2_img
+				map_region = 2
+				player_pos[1] = 0
+				player_movement[1] = 0
+
+		elif map_region == 3:
+			if player_pos[0] + player_movement[0] > 304:
+				bkgs = bkg_1_img
+				map_region = 4
+				player_pos[0] = 0
+				player_movement[0] = 0
+			elif player_pos[0] + player_movement[0] < 0:
+				bkgs = bkg_2_img
+				map_region = 3
+				player_pos[0] = 0
+				player_movement[0] = 0
+
+			if player_pos[1] + player_movement[1] + player.get_height() > 192:
+				bkgs = bkg_2_img
+				map_region = 3
+				player_pos[1] = 192 - player.get_height()
+				player_movement[1] = 0
+			elif player_pos[1] + player_movement[1] < 0:
+				bkgs = bkg_1_img
+				map_region = 1
+				player_pos[1] = 192 - player.get_height()
+				player_movement[1] = 0
+
+		elif map_region == 4:
+			if player_pos[0] + player_movement[0] + player.get_width() > 304:
+				bkgs = bkg_1_img
+				map_region = 4
+				player_pos[0] = 304 - player.get_width()
+				player_movement[0] = 0
+			elif player_pos[0] + player_movement[0] < 0:
+				bkgs = bkg_2_img
+				map_region = 3
+				player_pos[0] = 304 - player.get_width()
+				player_movement[0] = 0
+
+			if player_pos[1] + player_movement[1] + player.get_height() > 192:
+				bkgs = bkg_1_img
+				map_region = 4
+				player_pos[1] = 192 - player.get_height()
+				player_movement[1] = 0
+			elif player_pos[1] + player_movement[1] < 0:
+				bkgs = bkg_2_img
+				map_region = 2
+				player_pos[1] = 192 - player.get_height()
+				player_movement[1] = 0
+
+		# ---------------------------------------------------------------------
 		#  TESTE DE COLISÃO DE OBJETOS
 		# ---------------------------------------------------------------------
 		temp = [0, 0]
 		
-		# TESTE DE COLISÃO COM OS TILES
-
 		# verificação de colisão no eixo X
 		player_collision_rect.x = int(player_pos[0]) + player_movement[0]
 		temp[0] = player_collision_rect.x
@@ -227,7 +331,7 @@ def main():
 		#  CLEAR SCREEN
 		# ---------------------------------------------------------------------
 		display.fill(COLOR_AQUA_BLUE)
-		display.blit(bkg_1_img, (0, 0))
+		display.blit(bkgs, (0, 0))
 
 		# ---------------------------------------------------------------------
 		#  DRAW GAME MAP
