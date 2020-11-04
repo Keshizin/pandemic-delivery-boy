@@ -8,28 +8,22 @@ from pygame.locals import *
 
 COLOR_AQUA_BLUE = (146,244,255)
 
-# initialize all imported pygame modules
+# Inicializando todos os módulos de PyGame
 pygame.init()
 
-# my game screen resolution
-# GAME_WIDTH_SCREEN = 1100
-# GAME_HEIGHT_SCREEN = 800
-GAME_WIDTH_SCREEN = 600
-GAME_HEIGHT_SCREEN = 400
-# GAME_WIDTH_SCREEN = 1216 # 19 x 64
-# GAME_HEIGHT_SCREEN = 832 # 13 x 64
+# Resolução da janela do jogo
+GAME_WIDTH_SCREEN = 608
+GAME_HEIGHT_SCREEN = 384
 
+# Constantes para cores
 RED_COLOR = (255,0,0)
 BLACK_COLOR = (0,0,0)
 
 # -----------------------------------------------------------------------------
 #  GAME - GLOBAL SCOPE
 # -----------------------------------------------------------------------------
-player = pygame.image.load('assets/test.png')
-# player = pygame.image.load('assets/player32.png')
-# player.set_colorkey((255,255,255))
-
-# player_pos = [0, GAME_HEIGHT_SCREEN - player.get_height()]
+player = pygame.image.load('assets/p1.png')
+player.set_colorkey((255,255,255))
 player_pos = [16 * 5, 0]
 
 air = False
@@ -75,6 +69,7 @@ map_region = 1
 def main():
 	print("Pandemic Delivery Game")
 
+	global player
 	global air
 	global player_y_momentum
 	global momentum_speed
@@ -153,10 +148,6 @@ def main():
 					keys[2] = False
 				if event.key == K_DOWN:
 					keys[3] = False
-				# if event.key == K_1:
-				# 	bkgs = bkg_1_img
-				# if event.key == K_2:
-				# 	bkgs = bkg_2_img
 
 		# ---------------------------------------------------------------------
 		#  PLAYER INPUT
@@ -166,27 +157,33 @@ def main():
 
 		if keys[0]:
 			player_movement[0] = -2
+			player = pygame.image.load('assets/p3.png')
+			player.set_colorkey((255,255,255))
+			player_collision_rect = pygame.Rect(player_pos[0], player_pos[1], player.get_width(), player.get_height())
 
 		if keys[1]:
 			player_movement[0] = 2
+			player = pygame.image.load('assets/p3.png')
+			player = pygame.transform.flip(player, True, False)
+			player.set_colorkey((255,255,255))
+
+			player_collision_rect = pygame.Rect(player_pos[0], player_pos[1], player.get_width(), player.get_height())
 	
 		if keys[2]:
 			player_movement[1] = -2
-			# if air == False:
-			# 	air = True
-			# 	player_y_momentum = -momentum_limit
+			player = pygame.image.load('assets/p2.png')
+			player.set_colorkey((255,255,255))
+			player_collision_rect = pygame.Rect(player_pos[0], player_pos[1], player.get_width(), player.get_height())
 		
 		if keys[3]:
 			player_movement[1] = 2
+			player = pygame.image.load('assets/p1.png')
+			player.set_colorkey((255,255,255))
+			player_collision_rect = pygame.Rect(player_pos[0], player_pos[1], player.get_width(), player.get_height())
 
 		# ---------------------------------------------------------------------
 		#  ATUALIZANDO A POSIÇÃO DOS OBJETOS
 		# ---------------------------------------------------------------------		
-		# player_movement[1] += player_y_momentum
-		# player_y_momentum += 0.2
-
-		# if player_y_momentum > 3:
-		# 	player_y_momentum = 3
 
 		# ---------------------------------------------------------------------
 		#  TESTE DE COLISÃO AS BORDAS DA TELA
