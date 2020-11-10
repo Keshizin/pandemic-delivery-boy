@@ -1,60 +1,34 @@
 # Pandemic Delivery Game
-# Fabio Takeshi Ishikawa
-#
 # This code is released under MIT by Fabio Ishikawa
 
 import pygame, sys, os
 from pygame.locals import *
 
+# -----------------------------------------------------------------------------
+#  GAME - GLOBAL SCOPE
+# -----------------------------------------------------------------------------
 
 # Inicializando todos os módulos de PyGame
 pygame.init()
 
 # Resolução da janela do jogo
-# GAME_WIDTH_SCREEN = 608
-# GAME_HEIGHT_SCREEN = 384
-GAME_WIDTH_SCREEN = 912
-GAME_HEIGHT_SCREEN = 576
+WINDOW_WIDTH_SCREEN = 912
+WINDOW_HEIGHT_SCREEN = 576
 
-# Constantes para cores
+# Constantes para as cores
 COLOR_AQUA_BLUE = (146,244,255)
-RED_COLOR = (255,0,0)
-BLACK_COLOR = (0,0,0)
-WHITE_COLOR = (255,255,255)
+RED_COLOR       = (255,0,0)
+BLACK_COLOR     = (0,0,0)
+WHITE_COLOR     = (255,255,255)
 
-# -----------------------------------------------------------------------------
-#  GAME - GLOBAL SCOPE
-# -----------------------------------------------------------------------------
+
 player = pygame.image.load('assets/p1.png')
 player.set_colorkey((255,255,255))
 player_pos = [0, 0]
-
-# air = False
-# momentum_limit = 5
-# momentum_speed = 1
-# player_y_momentum = -momentum_limit
-# player_y_momentum = 0
-
 player_collision_rect = pygame.Rect(player_pos[0], player_pos[1], player.get_width(), player.get_height())
 
-# keys for arrows (LEFT, RIGHT, TOP, BOTTOM)
+# Array para armazenar o status de pressionamento das teclas (LEFT, RIGHT, TOP, BOTTOM)
 keys = [False, False, False, False]
-
-# font = pygame.font.Font('freesansbold.ttf', 15)
-# text = font.render('Seu texto aqui', True, RED, WHITE)
-
-# game_map = [['0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0'],
-# 			['0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0'],
-# 			['0','0','1','1','0','0','0','0','0','0','0','0','0','0','0','1','1','0','0'],
-# 			['0','0','1','0','0','0','0','0','0','0','0','0','0','0','1','0','0','0','0'],
-# 			['0','0','1','0','0','0','0','0','0','0','0','0','1','1','0','0','0','0','0'],
-# 			['0','0','0','0','0','0','0','0','0','0','0','0','1','0','0','0','0','0','0'],
-# 			['0','0','0','0','0','2','0','2','0','2','0','0','1','0','0','0','0','0','0'],
-# 			['0','0','0','0','0','0','0','0','0','0','0','0','1','0','0','0','0','0','0'],
-# 			['0','0','0','0','0','0','0','0','0','0','0','0','1','0','0','0','0','0','0'],
-# 			['0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','2','2','0','0'],
-# 			['0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','2','0','0'],
-# 			['0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0']]
 
 game_map1 = [
 	['0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0'],
@@ -116,11 +90,8 @@ game_map = game_map1
 
 boxo_img = pygame.image.load('assets/boxo.png')
 boxc_img = pygame.image.load('assets/boxc.png')
-
-# bkg_1_img = pygame.image.load('assets/bkg1.png')
 bkg_1_img = pygame.image.load('assets/bkg.png')
 bkg_2_img = pygame.image.load('assets/bkg2.png')
-
 bkgs = bkg_1_img
 map_region = 1
 
@@ -151,7 +122,7 @@ def main():
 	os.environ['SDL_VIDEO_WINDOW_POS'] = "%d,%d" % (100, 100)
 
 	# initialize a window or screen for display - SURFACE CREATION HERE!
-	screen = pygame.display.set_mode((GAME_WIDTH_SCREEN, GAME_HEIGHT_SCREEN), 0, 32)
+	window_surface = pygame.display.set_mode((WINDOW_WIDTH_SCREEN, WINDOW_HEIGHT_SCREEN), 0, 32)
 
 	# criando uma Surface menor para aumentar o desempenho
 	# display = pygame.Surface((300,200))
@@ -428,7 +399,7 @@ def main():
 		display.blit(player, (int(player_pos[0]), int(player_pos[1])))
 		# screen.blit(text, (5, 10))
 
-		screen.blit(pygame.transform.scale(display, (GAME_WIDTH_SCREEN, GAME_HEIGHT_SCREEN)),(0,0))
+		window_surface.blit(pygame.transform.scale(display, (WINDOW_WIDTH_SCREEN, WINDOW_HEIGHT_SCREEN)),(0,0))
 		
 		# update portions of the screen for software displays
 		# pygame.display.update()
