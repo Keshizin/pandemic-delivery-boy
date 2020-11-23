@@ -27,8 +27,8 @@ player.set_colorkey((255,255,255))
 player_pos = [50, 100]
 player_collision_rect = pygame.Rect(player_pos[0], player_pos[1], player.get_width(), player.get_height())
 
-enemy1 = pygame.image.load('assets/enemy1.png')
-enemy1.set_colorkey((255,255,255))
+# enemy1 = pygame.image.load('assets/enemy1.png')
+# enemy1.set_colorkey((255,255,255))
 
 # Array para armazenar o status de pressionamento das teclas (LEFT, RIGHT, TOP, BOTTOM)
 keys = [False, False, False, False]
