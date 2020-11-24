@@ -205,13 +205,13 @@ def main():
 		player_movement = [0, 0]
 
 		if keys[0]:
-			player_movement[0] = -1
+			player_movement[0] = -3
 			player = pygame.image.load('assets/p3.png')
 			player.set_colorkey((255,255,255))
 			player_collision_rect = pygame.Rect(player_pos[0], player_pos[1], player.get_width(), player.get_height())
 
 		if keys[1]:
-			player_movement[0] = 1
+			player_movement[0] = 3
 			player = pygame.image.load('assets/p3.png')
 			player = pygame.transform.flip(player, True, False)
 			player.set_colorkey((255,255,255))
@@ -219,13 +219,13 @@ def main():
 			player_collision_rect = pygame.Rect(player_pos[0], player_pos[1], player.get_width(), player.get_height())
 	
 		if keys[2]:
-			player_movement[1] = -1
+			player_movement[1] = -3
 			player = pygame.image.load('assets/p2.png')
 			player.set_colorkey((255,255,255))
 			player_collision_rect = pygame.Rect(player_pos[0], player_pos[1], player.get_width(), player.get_height())
 		
 		if keys[3]:
-			player_movement[1] = 1
+			player_movement[1] = 3
 			player = pygame.image.load('assets/p1.png')
 			player.set_colorkey((255,255,255))
 			player_collision_rect = pygame.Rect(player_pos[0], player_pos[1], player.get_width(), player.get_height())
