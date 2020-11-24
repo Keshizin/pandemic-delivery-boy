@@ -4,9 +4,15 @@
 import pygame, sys, os
 from pygame.locals import *
 
+# minhas dependências
+from gameobjects.sprite import Sprite
+
 # -----------------------------------------------------------------------------
 #  GAME - GLOBAL SCOPE
 # -----------------------------------------------------------------------------
+
+# sprite = Sprite("teste")
+# sprite.print_name()
 
 # Inicializando todos os módulos de PyGame
 pygame.init()
@@ -20,7 +26,6 @@ COLOR_AQUA_BLUE = (146,244,255)
 RED_COLOR       = (255,0,0)
 BLACK_COLOR     = (0,0,0)
 WHITE_COLOR     = (255,255,255)
-
 
 player = pygame.image.load('assets/p1.png')
 player.set_colorkey((255,255,255))
