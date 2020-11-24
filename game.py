@@ -22,7 +22,7 @@ WINDOW_WIDTH_SCREEN = 912
 WINDOW_HEIGHT_SCREEN = 576
 
 # Constantes para as cores
-COLOR_AQUA_BLUE = (146,244,255)
+AQUA_BLUE_COLOR = (146,244,255)
 RED_COLOR       = (255,0,0)
 BLACK_COLOR     = (0,0,0)
 WHITE_COLOR     = (255,255,255)
@@ -383,7 +383,7 @@ def main():
 		# ---------------------------------------------------------------------
 		#  CLEAR SCREEN
 		# ---------------------------------------------------------------------
-		display.fill(COLOR_AQUA_BLUE)
+		display.fill(AQUA_BLUE_COLOR)
 		display.blit(bkgs, (0, 0))
 
 		# ---------------------------------------------------------------------
@@ -415,13 +415,13 @@ def main():
 		#  USER INTERFACE
 		# ---------------------------------------------------------------------
 		if map_region == 1:
-			textRegion = font.render('LOJAS', True, BLACK_COLOR, COLOR_AQUA_BLUE)
+			textRegion = font.render('LOJAS', True, BLACK_COLOR, AQUA_BLUE_COLOR)
 		elif map_region == 2:
-			textRegion = font.render('CAMINHO 2', True, BLACK_COLOR, COLOR_AQUA_BLUE)
+			textRegion = font.render('CAMINHO 2', True, BLACK_COLOR, AQUA_BLUE_COLOR)
 		elif map_region == 3:
-			textRegion = font.render('CAMINHO 1', True, BLACK_COLOR, COLOR_AQUA_BLUE)
+			textRegion = font.render('CAMINHO 1', True, BLACK_COLOR, AQUA_BLUE_COLOR)
 		elif map_region == 4:
-			textRegion = font.render('CASAS', True, BLACK_COLOR, COLOR_AQUA_BLUE)
+			textRegion = font.render('CASAS', True, BLACK_COLOR, AQUA_BLUE_COLOR)
 
 		display.blit(textRegion, (10, 10))
 
@@ -433,11 +433,11 @@ def main():
 		display.blit(player, (int(player_pos[0]), int(player_pos[1])))
 		# screen.blit(text, (5, 10))
 
+		# faz a escala da surface para o tamanho da janela
 		window_surface.blit(pygame.transform.scale(display, (WINDOW_WIDTH_SCREEN, WINDOW_HEIGHT_SCREEN)),(0,0))
 		
 		# update portions of the screen for software displays
 		# pygame.display.update()
-
 		# update the full display Surface to the screen
 		pygame.display.flip()
 
