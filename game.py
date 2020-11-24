@@ -33,6 +33,8 @@ player.set_colorkey((255,255,255))
 player_pos = [50, 100]
 player_collision_rect = pygame.Rect(player_pos[0], player_pos[1], player.get_width(), player.get_height())
 
+enemy_pos = [100, 100]
+enemy_collision_rect = pygame.Rect(enemy_pos[0], enemy_pos[1], 15, 15)
 # enemy1 = pygame.image.load('assets/enemy1.png')
 # enemy1.set_colorkey((255,255,255))
 
@@ -100,12 +102,10 @@ game_map = game_map3
 boxo_img = pygame.image.load('assets/boxo.png')
 boxc_img = pygame.image.load('assets/boxc.png')
 barrel_img = pygame.image.load('assets/barrel.png')
-
 bkg_1_img = pygame.image.load('assets/bkg.png')
 bkg_2_img = pygame.image.load('assets/bkg2.png')
 bkg_3_img = pygame.image.load('assets/bkg3.png')
 bkg_4_img = pygame.image.load('assets/bkg4.png')
-
 bkgs = bkg_3_img
 map_region = 3
 
@@ -232,7 +232,7 @@ def main():
 
 		# ---------------------------------------------------------------------
 		#  ATUALIZANDO A POSIÇÃO DOS OBJETOS
-		# ---------------------------------------------------------------------		
+		# ---------------------------------------------------------------------
 
 		# ---------------------------------------------------------------------
 		#  TESTE DE COLISÃO AS BORDAS DA TELA
@@ -430,6 +430,9 @@ def main():
 		#  DRAW FRAME
 		# ---------------------------------------------------------------------
 		# pygame.draw.rect(display, test_object_color, test_object_rect)
+
+		if map_region == 3:
+			pygame.draw.rect(display, RED_COLOR, enemy_collision_rect)
 
 		display.blit(player, (int(player_pos[0]), int(player_pos[1])))
 		# screen.blit(text, (5, 10))
