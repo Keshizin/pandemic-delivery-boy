@@ -6,6 +6,7 @@ from pygame.locals import *
 
 # minhas dependências
 from gameobjects.sprite import Sprite
+from gameobjects.vector2 import Vector2
 
 # -----------------------------------------------------------------------------
 #  GAME - GLOBAL SCOPE

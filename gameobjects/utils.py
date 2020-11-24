@@ -9,6 +9,7 @@ def blend_color(color1, color2, blend_factor):
     blue  = blue1 + (blue2 - blue1) * blend_factor
     return int(red), int(green), int(blue)
 
+# função de LERP
 def interpolacao_linear(x, max):
 	factor = x / max
 
