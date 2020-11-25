@@ -85,6 +85,7 @@ class Sprite(object):
 	def get_move_intention(self, destiny):
 			pos_vector = Vector2(self.pos_x, self.pos_y)
 
+			# persegue o jogador
 			destination_x = destiny.get_pos_x() - destiny.get_width() / 2.0
 			destination_y = destiny.get_pos_y() - destiny.get_height() / 2.0
 			destination = (destination_x, destination_y)
@@ -93,17 +94,17 @@ class Sprite(object):
 			heading.normalize()
 
 			time_passed_seconds = 60 / 1000.0
-
 			distance_moved = time_passed_seconds * 5
 			pos_vector += heading * distance_moved 
 
 			self.collision_rect.x += int(pos_vector.x)
 			self.collision_rect.y += int(pos_vector.y)
-
 			self.pos_x = pos_vector.x
 			self.pos_y = pos_vector.y
 			self.collision_rect.x = pos_vector.x
 			self.collision_rect.y = pos_vector.y
+
+			return pos_vector
 
 	def test_collision_border(self, map_region):
 		# -------------------------------------------------------------------------

@@ -68,6 +68,8 @@ car3 = Sprite(354, 39, -random.randrange(1, 4), 0, 'assets/car3.png')
 
 # criação dos contaminadores
 enemy1 = Sprite(60, 100, -random.randrange(1, 2), -random.randrange(1, 2), 'assets/enemy1.png')
+enemy2 = Sprite(random.randrange(40, 70), random.randrange(100, 190), -random.randrange(1, 2), -random.randrange(1, 2), 'assets/enemy2.png')
+enemy3 = Sprite(random.randrange(40, 70), random.randrange(100, 190), -random.randrange(1, 2), -random.randrange(1, 2), 'assets/enemy3.png')
 
 
 enemy = pygame.image.load('assets/enemy1.png')
@@ -288,32 +290,9 @@ def game_main_loop():
 	elif current_map_region == 3:
 		car3.update(1)
 		# obter o vetor para perseguir o jogador
-		enemy_vector = enemy1.get_move_intention(player)
-
-	# enemy_vector = Vector2(enemy_pos[0], enemy_pos[1])
-	
-	# destination_x = player_pos[0] - player.get_width() / 2.0
-	# destination_y = player_pos[1] - player.get_height() / 2.0
-	# destination = (destination_x, destination_y)
-
-	# heading = Vector2.from_points(enemy_vector, destination)
-	# heading.normalize()
-
-	# time_passed_seconds = FPS / 1000.0
-
-	# distance_moved = time_passed_seconds * 5
-	# enemy_vector += heading * distance_moved 
-
-	# enemy_collision_rect.x += int(enemy_vector.x)
-	# enemy_collision_rect.y += int(enemy_vector.y)
-
-	# print("@debug | enemy_vector.x: " +  str(enemy_vector.x))
-	# print("@debug | enemy_vector.y: " +  str(enemy_vector.y))
-	# enemy_pos[0] = enemy_vector.x
-	# enemy_pos[1] = enemy_vector.y
-
-	# enemy_collision_rect.x = enemy_vector.x
-	# enemy_collision_rect.y = enemy_vector.y
+		enemy1.get_move_intention(player)
+		enemy2.get_move_intention(player)
+		enemy3.get_move_intention(player)
 
 	# ---------------------------------------------------------------------
 	#  TESTE DE COLISÃO COM A BORDA, TILES e INIMIGOS
@@ -347,6 +326,9 @@ def game_main_loop():
 		player.test_collision_enemy(car2)
 	elif current_map_region == 3:
 		player.test_collision_enemy(car3)
+		player.test_collision_enemy(enemy1)
+		player.test_collision_enemy(enemy2)
+		player.test_collision_enemy(enemy3)
 
 	# if player_collision_rect.colliderect(enemy_collision_rect):
 	# 	print("OUCH")
@@ -396,6 +378,8 @@ def game_main_loop():
 	elif current_map_region == 3:
 		display.blit(car3.get_image(), (int(car3.get_pos_x()), int(car3.get_pos_y())))
 		display.blit(enemy1.get_image(), (int(enemy1.get_pos_x()), int(enemy1.get_pos_y())))
+		display.blit(enemy2.get_image(), (int(enemy2.get_pos_x()), int(enemy2.get_pos_y())))
+		display.blit(enemy3.get_image(), (int(enemy3.get_pos_x()), int(enemy3.get_pos_y())))
 
 	# if map_region == 3:
 	# 	display.blit(enemy, (enemy_vector.x, enemy_vector.y))
