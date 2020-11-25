@@ -38,7 +38,7 @@ keys = [False, False, False, False]
 #  DECLARAÇÃO DE PERSONAGENS E OBJETOS
 # -----------------------------------------------------------------------------
 # criação do personagem do jogador (pos_x, pos_y, speed_x, speed_y, imagem)
-player = Sprite(50, 100, 3, 3, 'assets/p1.png')
+player = Sprite(50, 100, 2, 2, 'assets/p1.png')
 # player = pygame.image.load('assets/p1.png')
 # player.set_colorkey((255,255,255))
 # player_pos = [50, 100]
@@ -120,10 +120,10 @@ game_map4 = [
 	['2','2','2','2','2','2','2','2','2','2','2','2','2','2','2','2','2','2','2']]
 
 # (!) matriz de objetos atual
-game_map = game_map3
+game_map = game_map1
 
 # (!) identificador da região atual
-current_map_region = 3
+current_map_region = 1
 
 # imagens de background de cada região
 bkg_1_img = pygame.image.load('assets/bkg.png')
@@ -132,7 +132,7 @@ bkg_3_img = pygame.image.load('assets/bkg3.png')
 bkg_4_img = pygame.image.load('assets/bkg4.png')
 
 # (!) imagem de backgroud atual
-bkgs = bkg_3_img
+bkgs = bkg_1_img
 
 # Texto de interface
 font = pygame.font.Font('assets/pixelart.ttf', 8)
@@ -288,107 +288,22 @@ def main():
 		# ---------------------------------------------------------------------
 
 		# teste de colisão com as bordas da janela e com os objetos
-		player.test_collision(current_map_region)
-
-		# if map_region == 1:
-		# 	if player_pos[0] + player_movement[0] > 304:
-		# 		bkgs = bkg_2_img
-		# 		map_region = 2
-		# 		game_map = game_map2
-		# 		player_pos[0] = 0
-		# 		player_movement[0] = 0
-		# 	elif player_pos[0] + player_movement[0] < 0:
-		# 		bkgs = bkg_1_img
-		# 		map_region = 1
-		# 		player_pos[0] = 0
-		# 		player_movement[0] = 0
-
-		# 	if player_pos[1] + player_movement[1] > 192:
-		# 		bkgs = bkg_3_img
-		# 		map_region = 3
-		# 		game_map = game_map3
-		# 		player_pos[1] = 0
-		# 		player_movement[1] = 0
-		# 	elif player_pos[1] + player_movement[1] < 0:
-		# 		bkgs = bkg_1_img
-		# 		map_region = 1
-		# 		player_pos[1] = 0
-		# 		player_movement[1] = 0
-
-		# elif map_region == 2:
-		# 	if player_pos[0] + player_movement[0] + player.get_width() > 304:
-		# 		bkgs = bkg_2_img
-		# 		map_region = 2
-		# 		player_pos[0] = 304 - player.get_width()
-		# 		player_movement[0] = 0
-		# 	elif player_pos[0] + player_movement[0] + player.get_width() < 0:
-		# 		bkgs = bkg_1_img
-		# 		map_region = 1
-		# 		game_map = game_map1
-		# 		player_pos[0] = 304 - player.get_width()
-		# 		player_movement[0] = 0
-
-		# 	if player_pos[1] + player_movement[1] > 192:
-		# 		bkgs = bkg_4_img
-		# 		map_region = 4
-		# 		game_map = game_map4
-		# 		player_pos[1] = 0
-		# 		player_movement[1] = 0
-		# 	elif player_pos[1] + player_movement[1] < 0:
-		# 		bkgs = bkg_2_img
-		# 		map_region = 2
-		# 		player_pos[1] = 0
-		# 		player_movement[1] = 0
-
-		# elif map_region == 3:
-		# 	if player_pos[0] + player_movement[0] > 304:
-		# 		bkgs = bkg_4_img
-		# 		map_region = 4
-		# 		game_map = game_map4
-		# 		player_pos[0] = 0
-		# 		player_movement[0] = 0
-		# 	elif player_pos[0] + player_movement[0] < 0:
-		# 		bkgs = bkg_3_img
-		# 		map_region = 3
-		# 		player_pos[0] = 0
-		# 		player_movement[0] = 0
-
-		# 	if player_pos[1] + player_movement[1] + player.get_height() > 192:
-		# 		bkgs = bkg_3_img
-		# 		map_region = 3
-		# 		player_pos[1] = 192 - player.get_height()
-		# 		player_movement[1] = 0
-		# 	elif player_pos[1] + player_movement[1] < 0:
-		# 		bkgs = bkg_1_img
-		# 		map_region = 1
-		# 		game_map = game_map1
-		# 		player_pos[1] = 192 - player.get_height()
-		# 		player_movement[1] = 0
-
-		# elif map_region == 4:
-		# 	if player_pos[0] + player_movement[0] + player.get_width() > 304:
-		# 		bkgs = bkg_4_img
-		# 		map_region = 4
-		# 		player_pos[0] = 304 - player.get_width()
-		# 		player_movement[0] = 0
-		# 	elif player_pos[0] + player_movement[0] < 0:
-		# 		bkgs = bkg_3_img
-		# 		map_region = 3
-		# 		game_map = game_map3
-		# 		player_pos[0] = 304 - player.get_width()
-		# 		player_movement[0] = 0
-
-		# 	if player_pos[1] + player_movement[1] + player.get_height() > 192:
-		# 		bkgs = bkg_4_img
-		# 		map_region = 4
-		# 		player_pos[1] = 192 - player.get_height()
-		# 		player_movement[1] = 0
-		# 	elif player_pos[1] + player_movement[1] < 0:
-		# 		bkgs = bkg_2_img
-		# 		map_region = 2
-		# 		game_map = game_map2
-		# 		player_pos[1] = 192 - player.get_height()
-		# 		player_movement[1] = 0
+		current_map_region = player.test_collision(current_map_region, player_movement[0], player_movement[1])
+		print("current_map_region: " + str(current_map_region))
+		
+		# troca de regiões~
+		if current_map_region == 1:
+			bkgs = bkg_1_img
+			game_map = game_map1
+		elif current_map_region == 2:
+			bkgs = bkg_2_img
+			game_map = game_map2
+		elif current_map_region == 3:
+			bkgs = bkg_3_img
+			game_map = game_map3
+		elif current_map_region == 4:
+			bkgs = bkg_4_img
+			game_map = game_map4
 
 		# ---------------------------------------------------------------------
 		#  TESTE DE COLISÃO DE OBJETOS
@@ -498,6 +413,8 @@ def main():
 
 		# desenha o personagem DO JOGADOR
 		display.blit(player.get_image(), (int(player.get_pos_x()), int(player.get_pos_y())))
+		rect = player.get_collision_rect();
+		pygame.draw.rect(display, RED_COLOR, rect)
 
 		# ---------------------------------------------------------------------
 		#  ATUALIZA O FRAME

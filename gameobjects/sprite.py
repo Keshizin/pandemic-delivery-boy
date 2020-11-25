@@ -43,105 +43,84 @@ class Sprite(object):
 	def get_image(self):
 		return self.image
 
-	def test_collision(self, map_region):
-		print('teste collision')
-		# if map_region == 1:
-		# 	if player_pos[0] + player_movement[0] > 304:
-		# 		bkgs = bkg_2_img
-		# 		map_region = 2
-		# 		game_map = game_map2
-		# 		player_pos[0] = 0
-		# 		player_movement[0] = 0
-		# 	elif player_pos[0] + player_movement[0] < 0:
-		# 		bkgs = bkg_1_img
-		# 		map_region = 1
-		# 		player_pos[0] = 0
-		# 		player_movement[0] = 0
+	def get_collision_rect(self):
+		return self.collision_rect
 
-		# 	if player_pos[1] + player_movement[1] > 192:
-		# 		bkgs = bkg_3_img
-		# 		map_region = 3
-		# 		game_map = game_map3
-		# 		player_pos[1] = 0
-		# 		player_movement[1] = 0
-		# 	elif player_pos[1] + player_movement[1] < 0:
-		# 		bkgs = bkg_1_img
-		# 		map_region = 1
-		# 		player_pos[1] = 0
-		# 		player_movement[1] = 0
+	def test_collision(self, map_region, new_x, new_y):
+		# ETAPA 1 - TESTE DE COLISÃO COM AS BORDAS DA JANELA
+		if map_region == 1:
+			if self.pos_x + new_x > 304:
+				map_region = 2
+				self.pos_x = 0
+				new_x = 0
+			elif self.pos_x + new_x < 0:
+				self.pos_x = 0
+				new_x = 0
 
-		# elif map_region == 2:
-		# 	if player_pos[0] + player_movement[0] + player.get_width() > 304:
-		# 		bkgs = bkg_2_img
-		# 		map_region = 2
-		# 		player_pos[0] = 304 - player.get_width()
-		# 		player_movement[0] = 0
-		# 	elif player_pos[0] + player_movement[0] + player.get_width() < 0:
-		# 		bkgs = bkg_1_img
-		# 		map_region = 1
-		# 		game_map = game_map1
-		# 		player_pos[0] = 304 - player.get_width()
-		# 		player_movement[0] = 0
+			if self.pos_y + new_y > 192:
+				map_region = 3
+				self.pos_y = 0
+				new_y = 0
+			elif self.pos_y + new_y < 0:
+				self.pos_y = 0
+				new_y = 0
 
-		# 	if player_pos[1] + player_movement[1] > 192:
-		# 		bkgs = bkg_4_img
-		# 		map_region = 4
-		# 		game_map = game_map4
-		# 		player_pos[1] = 0
-		# 		player_movement[1] = 0
-		# 	elif player_pos[1] + player_movement[1] < 0:
-		# 		bkgs = bkg_2_img
-		# 		map_region = 2
-		# 		player_pos[1] = 0
-		# 		player_movement[1] = 0
+		elif map_region == 2:
+			if self.pos_x + new_x + self.width > 304:
+				self.pos_x = 304 - self.width
+				new_x = 0
 
-		# elif map_region == 3:
-		# 	if player_pos[0] + player_movement[0] > 304:
-		# 		bkgs = bkg_4_img
-		# 		map_region = 4
-		# 		game_map = game_map4
-		# 		player_pos[0] = 0
-		# 		player_movement[0] = 0
-		# 	elif player_pos[0] + player_movement[0] < 0:
-		# 		bkgs = bkg_3_img
-		# 		map_region = 3
-		# 		player_pos[0] = 0
-		# 		player_movement[0] = 0
+			elif self.pos_x + new_x + self.width < 0:
+				map_region = 1
+				self.pos_x = 304 - self.width
+				new_x = 0
 
-		# 	if player_pos[1] + player_movement[1] + player.get_height() > 192:
-		# 		bkgs = bkg_3_img
-		# 		map_region = 3
-		# 		player_pos[1] = 192 - player.get_height()
-		# 		player_movement[1] = 0
-		# 	elif player_pos[1] + player_movement[1] < 0:
-		# 		bkgs = bkg_1_img
-		# 		map_region = 1
-		# 		game_map = game_map1
-		# 		player_pos[1] = 192 - player.get_height()
-		# 		player_movement[1] = 0
+			if self.pos_y + new_y > 192:
+				map_region = 4
+				self.pos_y = 0
+				new_y = 0
+			elif self.pos_y + new_y < 0:
+				map_region = 2
+				new_y = 0
 
-		# elif map_region == 4:
-		# 	if player_pos[0] + player_movement[0] + player.get_width() > 304:
-		# 		bkgs = bkg_4_img
-		# 		map_region = 4
-		# 		player_pos[0] = 304 - player.get_width()
-		# 		player_movement[0] = 0
-		# 	elif player_pos[0] + player_movement[0] < 0:
-		# 		bkgs = bkg_3_img
-		# 		map_region = 3
-		# 		game_map = game_map3
-		# 		player_pos[0] = 304 - player.get_width()
-		# 		player_movement[0] = 0
+		elif map_region == 3:
+			if self.pos_x + new_x > 304:
+				map_region = 4
+				self.pos_x = 0
+				new_x = 0
+			elif self.pos_x + new_x < 0:
+				self.pos_x = 0
+				new_x = 0
 
-		# 	if player_pos[1] + player_movement[1] + player.get_height() > 192:
-		# 		bkgs = bkg_4_img
-		# 		map_region = 4
-		# 		player_pos[1] = 192 - player.get_height()
-		# 		player_movement[1] = 0
-		# 	elif player_pos[1] + player_movement[1] < 0:
-		# 		bkgs = bkg_2_img
-		# 		map_region = 2
-		# 		game_map = game_map2
-		# 		player_pos[1] = 192 - player.get_height()
-		# 		player_movement[1] = 0
+			if self.pos_y + new_y + self.height > 192:
+				self.pos_y = 192 - self.height
+				new_y = 0
+			elif self.pos_y + new_y < 0:
+				map_region = 1
+				self.pos_y = 192 - self.height
+				new_y = 0
 
+		elif map_region == 4:
+			if self.pos_x + new_x + self.width > 304:
+				self.pos_x = 304 - self.width
+				new_x = 0
+			elif self.pos_x + new_x < 0:
+				map_region = 3
+				self.pos_x = 304 - self.width
+				new_x = 0
+
+			if self.pos_y + new_y + self.height > 192:
+				self.pos_y = 192 - self.height
+				new_y = 0
+			elif self.pos_y + new_y < 0:
+				map_region = 2
+				self.pos_y = 192 - self.height
+				new_y = 0
+
+		self.pos_x += new_x
+		self.pos_y += new_y
+
+		print("POS X: " + str(self.pos_x))
+		print("POS Y: " + str(self.pos_y))
+
+		return map_region
