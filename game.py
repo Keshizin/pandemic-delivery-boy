@@ -38,11 +38,10 @@ keys = [False, False, False, False]
 #  DECLARAÇÃO DE PERSONAGENS E OBJETOS
 # -----------------------------------------------------------------------------
 # criação do personagem do jogador (pos_x, pos_y, speed_x, speed_y, imagem)
-player = Sprite(50, 100, 2, 2, 'assets/p1.png')
-# player = pygame.image.load('assets/p1.png')
-# player.set_colorkey((255,255,255))
-# player_pos = [50, 100]
-# player_collision_rect = pygame.Rect(player_pos[0], player_pos[1], player.get_width(), player.get_height())
+player = Sprite(50, 150, 1, 1, 'assets/p1.png')
+car1 = Sprite(354, 42, -random.randrange(1, 4), 0, 'assets/car1.png')
+car2 = Sprite(354, 135, -random.randrange(1, 4), 0, 'assets/car2.png')
+car3 = Sprite(354, 39, -random.randrange(1, 4), 0, 'assets/car3.png')
 
 enemy = pygame.image.load('assets/enemy1.png')
 enemy.set_colorkey((255,255,255))
@@ -78,16 +77,16 @@ game_map1 = [
 game_map2 = [
 	['1','1','0','0','0','0','0','1','1','1','1','1','1','1','1','1','1','1','1','1'],
 	['1','1','0','0','0','0','0','1','1','1','1','1','1','1','1','1','1','1','1','1'],
-	['1','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','1'],
-	['1','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','1'],
-	['1','1','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','1'],
-	['0','0','0','0','4','0','0','0','0','0','0','0','0','0','0','0','0','0','0','1'],
-	['0','0','0','0','4','0','0','0','0','0','0','0','0','0','0','0','0','0','0','1'],
-	['1','1','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','1'],
-	['1','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','1'],
-	['1','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','1'],
-	['1','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','1'],
-	['1','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','1']]
+	['1','0','0','0','0','0','0','4','0','0','0','0','0','4','0','0','0','0','0','1'],
+	['1','0','0','0','4','0','0','4','0','0','0','0','0','4','0','0','0','0','0','1'],
+	['1','1','0','0','4','0','0','4','0','0','4','0','0','4','0','0','4','0','0','1'],
+	['0','0','0','0','4','0','0','4','0','0','4','0','0','4','0','0','4','0','0','1'],
+	['0','0','0','0','4','0','0','4','0','0','4','0','0','4','0','0','4','0','0','1'],
+	['1','1','4','4','4','0','0','4','0','0','4','0','0','4','0','0','4','0','0','1'],
+	['1','0','0','0','0','0','0','4','0','0','4','0','0','4','0','0','4','0','0','1'],
+	['1','0','0','0','0','0','0','0','0','0','4','0','0','0','0','0','4','0','0','1'],
+	['1','0','0','4','0','0','0','0','0','0','4','0','0','0','0','0','4','0','0','1'],
+	['1','0','0','4','4','4','4','4','4','4','4','4','4','4','4','4','4','4','4','1']]
 
 # matriz de objetos colisores da região 3 (caminho 2)
 game_map3 = [
@@ -96,24 +95,24 @@ game_map3 = [
 	['0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','1'],
 	['0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','1'],
 	['0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','1'],
-	['2','0','2','2','2','2','0','0','0','0','0','2','0','0','0','2','2','0','2','1'],
-	['0','1','0','0','0','0','0','0','0','0','0','2','0','0','0','0','0','1','0','0'],
+	['2','1','2','2','2','2','0','0','0','0','0','2','0','0','0','2','2','1','2','1'],
+	['0','0','0','0','0','0','0','0','0','0','0','2','0','0','0','0','0','0','0','0'],
 	['0','0','0','0','0','0','0','0','0','0','0','2','0','0','0','0','0','0','0','0'],
 	['0','0','0','0','0','2','2','2','2','0','0','0','0','0','2','0','0','0','0','0'],
 	['0','0','2','0','0','0','0','0','0','0','0','0','0','0','2','0','0','0','0','0'],
 	['0','0','2','0','0','0','0','0','0','0','0','0','0','0','2','0','0','0','0','0'],
-	['0','0','2','0','0','0','0','0','0','0','0','0','0','0','2','0','0','0','0','0']]
+	['0','0','2','0','0','0','0','0','0','0','0','0','0','0','2','0','0','2','2','2']]
 
 # matriz de objetos colisores da região 4 (moradores - entregas)
 game_map4 = [
-	['3','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','2'],
-	['3','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','2'],
+	['3','0','0','2','2','2','2','2','2','2','2','2','2','2','2','2','2','2','2'],
+	['3','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0'],
+	['3','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0'],
 	['3','0','0','0','0','0','0','1','1','1','1','1','0','0','1','1','1','1','1'],
 	['3','0','0','0','0','0','0','1','1','1','1','1','0','0','1','1','1','1','1'],
 	['3','0','0','0','0','0','0','1','1','1','1','1','0','0','1','1','1','1','1'],
-	['3','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','2'],
 	['0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','2'],
-	['0','0','0','3','3','0','0','0','0','0','0','0','0','0','0','3','0','0','2'],
+	['0','0','0','3','3','0','0','0','0','0','0','0','0','0','0','0','0','0','2'],
 	['0','0','0','3','3','0','0','0','0','0','0','0','0','0','0','0','0','0','2'],
 	['0','0','0','0','0','0','0','0','0','0','0','3','3','0','0','0','0','0','2'],
 	['0','0','0','0','0','0','0','0','0','0','0','3','3','0','0','0','0','0','2'],
@@ -145,19 +144,8 @@ def main():
 
 	global player
 	global current_map_region
-
-
-
-
-
-
-	global air
-	global player_y_momentum
-	global momentum_speed
-	global player_collision_rect
-	global true_scroll
-	global bkgs
 	global game_map
+	global bkgs
 
 	# objeto de tratamento de tempo
 	clock = pygame.time.Clock()
@@ -174,17 +162,16 @@ def main():
 	# criação da surface com o tamanho correto dos sprites (304x192 pixels) - melhor desempenho
 	display = pygame.Surface((304, 192))
 
-	# lista de tiles/objetos
-	tile_rects = []
+	# lista de tiles/objetos colisores
+	collision_tiles_rects = []
 
 	# preenche a lista de tiles/objetos de acordo com a matriz game_map
 	y = 0
-
 	for layer in game_map:
 		x = 0
 		for tile in layer:
 			if tile != '0':
-				tile_rects.append(pygame.Rect(x * 16, y * 16, 16, 16))
+				collision_tiles_rects.append(pygame.Rect(x * 16, y * 16, 16, 16))
 
 			x += 0
 		y += 1
@@ -238,26 +225,37 @@ def main():
 		# player_movement representa o quanto devemos deslocar o personagem!
 		player_movement = [0, 0]
 
+		# ESQUERDA
 		if keys[0]:
-			player_movement[0] = -player.get_speed_x()
 			player.set_image('assets/p3.png')
+			player_movement[0] = -player.get_speed_x()
 
-		if keys[1]:
-			player_movement[0] = player.get_speed_x()
+		# DIREITA
+		if keys[1]:			
 			player.set_image('assets/p3.png')
 			player.flip_image(True, False) # flip imagem na horizontal
-	
+			player_movement[0] = player.get_speed_x()
+
+		# CIMA
 		if keys[2]:
-			player_movement[1] = -player.get_speed_y()
 			player.set_image('assets/p2.png')
+			player_movement[1] = -player.get_speed_y()
 		
+		# EMBAIXO
 		if keys[3]:
-			player_movement[1] = player.get_speed_y()
 			player.set_image('assets/p1.png')
+			player_movement[1] = player.get_speed_y()
 
 		# ---------------------------------------------------------------------
 		#  ATUALIZANDO A POSIÇÃO DOS OBJETOS
 		# ---------------------------------------------------------------------
+		if current_map_region == 1:
+			car1.update(current_map_region)
+			car2.update(current_map_region)
+
+		elif current_map_region == 3:
+			car3.update(1)
+
 		# enemy_vector = Vector2(enemy_pos[0], enemy_pos[1])
 		
 		# destination_x = player_pos[0] - player.get_width() / 2.0
@@ -284,13 +282,15 @@ def main():
 		# enemy_collision_rect.y = enemy_vector.y
 
 		# ---------------------------------------------------------------------
-		#  TESTE DE COLISÃO
+		#  TESTE DE COLISÃO COM A BORDA, TILES e INIMIGOS
 		# ---------------------------------------------------------------------
 
-		# teste de colisão com as bordas da janela e com os objetos
-		current_map_region = player.test_collision(current_map_region, player_movement[0], player_movement[1])
-		print("current_map_region: " + str(current_map_region))
-		
+		# teste de colisão com os tiles
+		player_movement[0], new_y = player.test_collision_tiles(player_movement[0], player_movement[1], collision_tiles_rects)
+
+		# teste de colisão com as bordas da janela
+		current_map_region = player.test_collision_border(current_map_region)
+
 		# troca de regiões~
 		if current_map_region == 1:
 			bkgs = bkg_1_img
@@ -306,48 +306,8 @@ def main():
 			game_map = game_map4
 
 		# ---------------------------------------------------------------------
-		#  TESTE DE COLISÃO DE OBJETOS
+		#  TESTE DE COLISÃO COM INIMIGOS
 		# ---------------------------------------------------------------------
-		# temp = [0, 0]
-		
-		# # verificação de colisão no eixo X
-		# player_collision_rect.x = int(player_pos[0]) + player_movement[0]
-		# temp[0] = player_collision_rect.x
-
-		# for tile in tile_rects:
-		# 	if player_collision_rect.colliderect(tile):
-		# 		if player_movement[0] > 0:
-		# 			# print("RIGHT")
-		# 			temp[0] = tile[0] - player_collision_rect.width
-		# 			player_collision_rect.x = temp[0]
-		# 		elif player_movement[0] < 0:
-		# 			# print("LEFT")
-		# 			temp[0] = tile[0] + tile[2]
-		# 			player_collision_rect.x = temp[0]
-
-		# # verificação de colisão no eixo Y
-		# player_collision_rect.y = int(player_pos[1]) + int(player_movement[1])
-		# temp[1] = player_collision_rect.y
-
-		# for tile in tile_rects:
-		# 	if player_collision_rect.colliderect(tile):
-		# 		if player_movement[1] > 0:
-		# 			# print("BOTTOM")
-		# 			temp[1] = tile[1] - player_collision_rect.height
-		# 			player_collision_rect.y = temp[1]
-
-		# 			air = False
-		# 			player_y_momentum = 0
-
-		# 		elif player_movement[1] < 0:
-		# 			# print("TOP")
-		# 			temp[1] = tile[1] + tile[3]
-		# 			player_collision_rect.y = temp[1]
-			
-		# 			player_y_momentum = 0
-
-		# player_pos[0] = temp[0]
-		# player_pos[1] = temp[1]
 
 		# if player_collision_rect.colliderect(enemy_collision_rect):
 		# 	print("OUCH")
@@ -360,36 +320,33 @@ def main():
 
 		# limpa a tela com a cor branca
 		display.fill(WHITE_COLOR)
-		# exibe o background da região atual
+		# desenha o background da região atual
 		display.blit(bkgs, (0, 0))
 
 		# ---------------------------------------------------------------------
 		#  DRAW GAME MAP
 		# ---------------------------------------------------------------------
-		# tile_rects = []
-		# y = 0
+		collision_tiles_rects = []
+		y = 0
 
-		# for layer in game_map:
-		# 	x = 0
-		# 	for tile in layer:
-	
-		# 		# if tile == '1':
-		# 			# display.blit(boxo_img, (x * 16, y * 16))
+		for layer in game_map:
+			x = 0
+			for tile in layer:
+			
+				if tile == '2':
+					display.blit(barrel_img, (x * 16, y * 16))
+
+				if tile == '3':
+					display.blit(boxc_img, (x * 16, y * 16))
+
+				if tile == '4':
+					display.blit(barrel_img, (x * 16, y * 16))
 					
-		# 		if tile == '2':
-		# 			display.blit(barrel_img, (x * 16, y * 16))
+				if tile != '0':
+					collision_tiles_rects.append(pygame.Rect(x * 16, y * 16, 16, 16))
 
-		# 		if tile == '3':
-		# 			display.blit(boxc_img, (x * 16, y * 16))
-
-		# 		if tile == '4':
-		# 			display.blit(cone_img, (x * 16, y * 16))
-					
-		# 		if tile != '0':
-		# 			tile_rects.append(pygame.Rect(x * 16, y * 16, 16, 16))
-
-		# 		x += 1
-		# 	y += 1
+				x += 1
+			y += 1
 
 		# ---------------------------------------------------------------------
 		#  USER INTERFACE
@@ -408,13 +365,20 @@ def main():
 		# ---------------------------------------------------------------------
 		#  DESENHA PERSNAGENS
 		# ---------------------------------------------------------------------
+		if current_map_region == 1:
+			display.blit(car1.get_image(), (int(car1.get_pos_x()), int(car1.get_pos_y())))
+			display.blit(car2.get_image(), (int(car2.get_pos_x()), int(car2.get_pos_y())))
+		elif current_map_region == 3:
+			display.blit(car3.get_image(), (int(car3.get_pos_x()), int(car3.get_pos_y())))
+
+
 		# if map_region == 3:
 		# 	display.blit(enemy, (enemy_vector.x, enemy_vector.y))
 
 		# desenha o personagem DO JOGADOR
 		display.blit(player.get_image(), (int(player.get_pos_x()), int(player.get_pos_y())))
-		rect = player.get_collision_rect();
-		pygame.draw.rect(display, RED_COLOR, rect)
+		# rect = player.get_collision_rect();
+		# pygame.draw.rect(display, RED_COLOR, rect)
 
 		# ---------------------------------------------------------------------
 		#  ATUALIZA O FRAME
