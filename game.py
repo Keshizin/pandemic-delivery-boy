@@ -31,19 +31,35 @@ RED_COLOR       = (255,0,0)
 BLACK_COLOR     = (0,0,0)
 WHITE_COLOR     = (255,255,255)
 
-player = pygame.image.load('assets/p1.png')
-player.set_colorkey((255,255,255))
-player_pos = [50, 100]
-player_collision_rect = pygame.Rect(player_pos[0], player_pos[1], player.get_width(), player.get_height())
+# Array para armazenar o status de pressionamento das teclas (LEFT, RIGHT, TOP, BOTTOM)
+keys = [False, False, False, False]
+
+# -----------------------------------------------------------------------------
+#  DECLARAÇÃO DE PERSONAGENS E OBJETOS
+# -----------------------------------------------------------------------------
+# criação do personagem do jogador (pos_x, pos_y, speed_x, speed_y, imagem)
+player = Sprite(50, 100, 3, 3, 'assets/p1.png')
+# player = pygame.image.load('assets/p1.png')
+# player.set_colorkey((255,255,255))
+# player_pos = [50, 100]
+# player_collision_rect = pygame.Rect(player_pos[0], player_pos[1], player.get_width(), player.get_height())
 
 enemy = pygame.image.load('assets/enemy1.png')
 enemy.set_colorkey((255,255,255))
 enemy_pos = [100, 100]
 enemy_collision_rect = pygame.Rect(enemy_pos[0], enemy_pos[1], 15, 15)
 
-# Array para armazenar o status de pressionamento das teclas (LEFT, RIGHT, TOP, BOTTOM)
-keys = [False, False, False, False]
+boxo_img = pygame.image.load('assets/boxo.png')
+boxc_img = pygame.image.load('assets/boxc.png')
+barrel_img = pygame.image.load('assets/barrel.png')
+cone_img = pygame.image.load('assets/cone.png')
+cone_img.set_colorkey((255,255,255))
 
+# -----------------------------------------------------------------------------
+#  DECLARAÇÃO DE PERSONAGENS E OBJETOS
+# -----------------------------------------------------------------------------
+
+# matriz de objetos colisores da região 1 (lojas - pedidos)
 game_map1 = [
 	['1','1','1','1','1','1','1','1','1','1','1','1','1','0','0','0','1','1','1','1'],
 	['1','1','1','1','1','1','1','1','1','1','1','1','1','0','0','0','1','1','1','1'],
@@ -58,6 +74,7 @@ game_map1 = [
 	['0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','1'],
 	['1','1','1','0','0','0','1','1','1','1','1','1','1','0','0','0','1','1','1','1']]
 
+# matriz de objetos colisores da região 2 (caminho 1)
 game_map2 = [
 	['1','1','0','0','0','0','0','1','1','1','1','1','1','1','1','1','1','1','1','1'],
 	['1','1','0','0','0','0','0','1','1','1','1','1','1','1','1','1','1','1','1','1'],
@@ -72,6 +89,7 @@ game_map2 = [
 	['1','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','1'],
 	['1','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','1']]
 
+# matriz de objetos colisores da região 3 (caminho 2)
 game_map3 = [
 	['1','1','1','0','0','0','1','1','1','1','1','1','1','0','0','0','1','1','1','1'],
 	['0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','1'],
@@ -86,6 +104,7 @@ game_map3 = [
 	['0','0','2','0','0','0','0','0','0','0','0','0','0','0','2','0','0','0','0','0'],
 	['0','0','2','0','0','0','0','0','0','0','0','0','0','0','2','0','0','0','0','0']]
 
+# matriz de objetos colisores da região 4 (moradores - entregas)
 game_map4 = [
 	['3','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','2'],
 	['3','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','2'],
@@ -100,21 +119,22 @@ game_map4 = [
 	['0','0','0','0','0','0','0','0','0','0','0','3','3','0','0','0','0','0','2'],
 	['2','2','2','2','2','2','2','2','2','2','2','2','2','2','2','2','2','2','2']]
 
+# (!) matriz de objetos atual
 game_map = game_map3
 
-boxo_img = pygame.image.load('assets/boxo.png')
-boxc_img = pygame.image.load('assets/boxc.png')
-barrel_img = pygame.image.load('assets/barrel.png')
-cone_img = pygame.image.load('assets/cone.png')
-cone_img.set_colorkey((255,255,255))
+# (!) identificador da região atual
+current_map_region = 3
 
+# imagens de background de cada região
 bkg_1_img = pygame.image.load('assets/bkg.png')
 bkg_2_img = pygame.image.load('assets/bkg2.png')
 bkg_3_img = pygame.image.load('assets/bkg3.png')
 bkg_4_img = pygame.image.load('assets/bkg4.png')
-bkgs = bkg_3_img
-map_region = 3
 
+# (!) imagem de backgroud atual
+bkgs = bkg_3_img
+
+# Texto de interface
 font = pygame.font.Font('assets/pixelart.ttf', 8)
 
 # -----------------------------------------------------------------------------
@@ -124,32 +144,40 @@ def main():
 	print("Pandemic Delivery Game")
 
 	global player
+	global current_map_region
+
+
+
+
+
+
 	global air
 	global player_y_momentum
 	global momentum_speed
 	global player_collision_rect
 	global true_scroll
 	global bkgs
-	global map_region
 	global game_map
 
-	# create an object to help track time
+	# objeto de tratamento de tempo
 	clock = pygame.time.Clock()
 
-	# set the current window caption
+	# texto da barra de título da janela
 	pygame.display.set_caption("PANDEMIC DELIVERY BOY")
 
-	# set the window screen position
+	# posição da janela na tela
 	os.environ['SDL_VIDEO_WINDOW_POS'] = "%d,%d" % (100, 100)
 
-	# initialize a window or screen for display - SURFACE CREATION HERE!
+	# criação da surface para a janela principal - SURFACE CREATION HERE!
 	window_surface = pygame.display.set_mode((WINDOW_WIDTH_SCREEN, WINDOW_HEIGHT_SCREEN), 0, 32)
 
-	# criando uma Surface menor para aumentar o desempenho
-	# display = pygame.Surface((300,200))
+	# criação da surface com o tamanho correto dos sprites (304x192 pixels) - melhor desempenho
 	display = pygame.Surface((304, 192))
 
+	# lista de tiles/objetos
 	tile_rects = []
+
+	# preenche a lista de tiles/objetos de acordo com a matriz game_map
 	y = 0
 
 	for layer in game_map:
@@ -211,277 +239,276 @@ def main():
 		player_movement = [0, 0]
 
 		if keys[0]:
-			player_movement[0] = -1
-			player = pygame.image.load('assets/p3.png')
-			player.set_colorkey((255,255,255))
-			player_collision_rect = pygame.Rect(player_pos[0], player_pos[1], player.get_width(), player.get_height())
+			player_movement[0] = -player.get_speed_x()
+			player.set_image('assets/p3.png')
 
 		if keys[1]:
-			player_movement[0] = 1
-			player = pygame.image.load('assets/p3.png')
-			player = pygame.transform.flip(player, True, False)
-			player.set_colorkey((255,255,255))
-
-			player_collision_rect = pygame.Rect(player_pos[0], player_pos[1], player.get_width(), player.get_height())
+			player_movement[0] = player.get_speed_x()
+			player.set_image('assets/p3.png')
+			player.flip_image(True, False) # flip imagem na horizontal
 	
 		if keys[2]:
-			player_movement[1] = -1
-			player = pygame.image.load('assets/p2.png')
-			player.set_colorkey((255,255,255))
-			player_collision_rect = pygame.Rect(player_pos[0], player_pos[1], player.get_width(), player.get_height())
+			player_movement[1] = -player.get_speed_y()
+			player.set_image('assets/p2.png')
 		
 		if keys[3]:
-			player_movement[1] = 1
-			player = pygame.image.load('assets/p1.png')
-			player.set_colorkey((255,255,255))
-			player_collision_rect = pygame.Rect(player_pos[0], player_pos[1], player.get_width(), player.get_height())
+			player_movement[1] = player.get_speed_y()
+			player.set_image('assets/p1.png')
 
 		# ---------------------------------------------------------------------
 		#  ATUALIZANDO A POSIÇÃO DOS OBJETOS
 		# ---------------------------------------------------------------------
-		enemy_vector = Vector2(enemy_pos[0], enemy_pos[1])
+		# enemy_vector = Vector2(enemy_pos[0], enemy_pos[1])
 		
-		destination_x = player_pos[0] - player.get_width() / 2.0
-		destination_y = player_pos[1] - player.get_height() / 2.0
-		destination = (destination_x, destination_y)
+		# destination_x = player_pos[0] - player.get_width() / 2.0
+		# destination_y = player_pos[1] - player.get_height() / 2.0
+		# destination = (destination_x, destination_y)
 
-		heading = Vector2.from_points(enemy_vector, destination)
-		heading.normalize()
+		# heading = Vector2.from_points(enemy_vector, destination)
+		# heading.normalize()
 
-		time_passed_seconds = FPS / 1000.0
+		# time_passed_seconds = FPS / 1000.0
 
-		distance_moved = time_passed_seconds * 5
-		enemy_vector += heading * distance_moved 
+		# distance_moved = time_passed_seconds * 5
+		# enemy_vector += heading * distance_moved 
 
-		enemy_collision_rect.x += int(enemy_vector.x)
-		enemy_collision_rect.y += int(enemy_vector.y)
+		# enemy_collision_rect.x += int(enemy_vector.x)
+		# enemy_collision_rect.y += int(enemy_vector.y)
 
 		# print("@debug | enemy_vector.x: " +  str(enemy_vector.x))
 		# print("@debug | enemy_vector.y: " +  str(enemy_vector.y))
-		enemy_pos[0] = enemy_vector.x
-		enemy_pos[1] = enemy_vector.y
+		# enemy_pos[0] = enemy_vector.x
+		# enemy_pos[1] = enemy_vector.y
 
-		enemy_collision_rect.x = enemy_vector.x
-		enemy_collision_rect.y = enemy_vector.y
+		# enemy_collision_rect.x = enemy_vector.x
+		# enemy_collision_rect.y = enemy_vector.y
 
 		# ---------------------------------------------------------------------
-		#  TESTE DE COLISÃO AS BORDAS DA TELA
+		#  TESTE DE COLISÃO
 		# ---------------------------------------------------------------------
-		if map_region == 1:
-			if player_pos[0] + player_movement[0] > 304:
-				bkgs = bkg_2_img
-				map_region = 2
-				game_map = game_map2
-				player_pos[0] = 0
-				player_movement[0] = 0
-			elif player_pos[0] + player_movement[0] < 0:
-				bkgs = bkg_1_img
-				map_region = 1
-				player_pos[0] = 0
-				player_movement[0] = 0
 
-			if player_pos[1] + player_movement[1] > 192:
-				bkgs = bkg_3_img
-				map_region = 3
-				game_map = game_map3
-				player_pos[1] = 0
-				player_movement[1] = 0
-			elif player_pos[1] + player_movement[1] < 0:
-				bkgs = bkg_1_img
-				map_region = 1
-				player_pos[1] = 0
-				player_movement[1] = 0
+		# teste de colisão com as bordas da janela e com os objetos
+		player.test_collision(current_map_region)
 
-		elif map_region == 2:
-			if player_pos[0] + player_movement[0] + player.get_width() > 304:
-				bkgs = bkg_2_img
-				map_region = 2
-				player_pos[0] = 304 - player.get_width()
-				player_movement[0] = 0
-			elif player_pos[0] + player_movement[0] + player.get_width() < 0:
-				bkgs = bkg_1_img
-				map_region = 1
-				game_map = game_map1
-				player_pos[0] = 304 - player.get_width()
-				player_movement[0] = 0
+		# if map_region == 1:
+		# 	if player_pos[0] + player_movement[0] > 304:
+		# 		bkgs = bkg_2_img
+		# 		map_region = 2
+		# 		game_map = game_map2
+		# 		player_pos[0] = 0
+		# 		player_movement[0] = 0
+		# 	elif player_pos[0] + player_movement[0] < 0:
+		# 		bkgs = bkg_1_img
+		# 		map_region = 1
+		# 		player_pos[0] = 0
+		# 		player_movement[0] = 0
 
-			if player_pos[1] + player_movement[1] > 192:
-				bkgs = bkg_4_img
-				map_region = 4
-				game_map = game_map4
-				player_pos[1] = 0
-				player_movement[1] = 0
-			elif player_pos[1] + player_movement[1] < 0:
-				bkgs = bkg_2_img
-				map_region = 2
-				player_pos[1] = 0
-				player_movement[1] = 0
+		# 	if player_pos[1] + player_movement[1] > 192:
+		# 		bkgs = bkg_3_img
+		# 		map_region = 3
+		# 		game_map = game_map3
+		# 		player_pos[1] = 0
+		# 		player_movement[1] = 0
+		# 	elif player_pos[1] + player_movement[1] < 0:
+		# 		bkgs = bkg_1_img
+		# 		map_region = 1
+		# 		player_pos[1] = 0
+		# 		player_movement[1] = 0
 
-		elif map_region == 3:
-			if player_pos[0] + player_movement[0] > 304:
-				bkgs = bkg_4_img
-				map_region = 4
-				game_map = game_map4
-				player_pos[0] = 0
-				player_movement[0] = 0
-			elif player_pos[0] + player_movement[0] < 0:
-				bkgs = bkg_3_img
-				map_region = 3
-				player_pos[0] = 0
-				player_movement[0] = 0
+		# elif map_region == 2:
+		# 	if player_pos[0] + player_movement[0] + player.get_width() > 304:
+		# 		bkgs = bkg_2_img
+		# 		map_region = 2
+		# 		player_pos[0] = 304 - player.get_width()
+		# 		player_movement[0] = 0
+		# 	elif player_pos[0] + player_movement[0] + player.get_width() < 0:
+		# 		bkgs = bkg_1_img
+		# 		map_region = 1
+		# 		game_map = game_map1
+		# 		player_pos[0] = 304 - player.get_width()
+		# 		player_movement[0] = 0
 
-			if player_pos[1] + player_movement[1] + player.get_height() > 192:
-				bkgs = bkg_3_img
-				map_region = 3
-				player_pos[1] = 192 - player.get_height()
-				player_movement[1] = 0
-			elif player_pos[1] + player_movement[1] < 0:
-				bkgs = bkg_1_img
-				map_region = 1
-				game_map = game_map1
-				player_pos[1] = 192 - player.get_height()
-				player_movement[1] = 0
+		# 	if player_pos[1] + player_movement[1] > 192:
+		# 		bkgs = bkg_4_img
+		# 		map_region = 4
+		# 		game_map = game_map4
+		# 		player_pos[1] = 0
+		# 		player_movement[1] = 0
+		# 	elif player_pos[1] + player_movement[1] < 0:
+		# 		bkgs = bkg_2_img
+		# 		map_region = 2
+		# 		player_pos[1] = 0
+		# 		player_movement[1] = 0
 
-		elif map_region == 4:
-			if player_pos[0] + player_movement[0] + player.get_width() > 304:
-				bkgs = bkg_4_img
-				map_region = 4
-				player_pos[0] = 304 - player.get_width()
-				player_movement[0] = 0
-			elif player_pos[0] + player_movement[0] < 0:
-				bkgs = bkg_3_img
-				map_region = 3
-				game_map = game_map3
-				player_pos[0] = 304 - player.get_width()
-				player_movement[0] = 0
+		# elif map_region == 3:
+		# 	if player_pos[0] + player_movement[0] > 304:
+		# 		bkgs = bkg_4_img
+		# 		map_region = 4
+		# 		game_map = game_map4
+		# 		player_pos[0] = 0
+		# 		player_movement[0] = 0
+		# 	elif player_pos[0] + player_movement[0] < 0:
+		# 		bkgs = bkg_3_img
+		# 		map_region = 3
+		# 		player_pos[0] = 0
+		# 		player_movement[0] = 0
 
-			if player_pos[1] + player_movement[1] + player.get_height() > 192:
-				bkgs = bkg_4_img
-				map_region = 4
-				player_pos[1] = 192 - player.get_height()
-				player_movement[1] = 0
-			elif player_pos[1] + player_movement[1] < 0:
-				bkgs = bkg_2_img
-				map_region = 2
-				game_map = game_map2
-				player_pos[1] = 192 - player.get_height()
-				player_movement[1] = 0
+		# 	if player_pos[1] + player_movement[1] + player.get_height() > 192:
+		# 		bkgs = bkg_3_img
+		# 		map_region = 3
+		# 		player_pos[1] = 192 - player.get_height()
+		# 		player_movement[1] = 0
+		# 	elif player_pos[1] + player_movement[1] < 0:
+		# 		bkgs = bkg_1_img
+		# 		map_region = 1
+		# 		game_map = game_map1
+		# 		player_pos[1] = 192 - player.get_height()
+		# 		player_movement[1] = 0
+
+		# elif map_region == 4:
+		# 	if player_pos[0] + player_movement[0] + player.get_width() > 304:
+		# 		bkgs = bkg_4_img
+		# 		map_region = 4
+		# 		player_pos[0] = 304 - player.get_width()
+		# 		player_movement[0] = 0
+		# 	elif player_pos[0] + player_movement[0] < 0:
+		# 		bkgs = bkg_3_img
+		# 		map_region = 3
+		# 		game_map = game_map3
+		# 		player_pos[0] = 304 - player.get_width()
+		# 		player_movement[0] = 0
+
+		# 	if player_pos[1] + player_movement[1] + player.get_height() > 192:
+		# 		bkgs = bkg_4_img
+		# 		map_region = 4
+		# 		player_pos[1] = 192 - player.get_height()
+		# 		player_movement[1] = 0
+		# 	elif player_pos[1] + player_movement[1] < 0:
+		# 		bkgs = bkg_2_img
+		# 		map_region = 2
+		# 		game_map = game_map2
+		# 		player_pos[1] = 192 - player.get_height()
+		# 		player_movement[1] = 0
 
 		# ---------------------------------------------------------------------
 		#  TESTE DE COLISÃO DE OBJETOS
 		# ---------------------------------------------------------------------
-		temp = [0, 0]
+		# temp = [0, 0]
 		
-		# verificação de colisão no eixo X
-		player_collision_rect.x = int(player_pos[0]) + player_movement[0]
-		temp[0] = player_collision_rect.x
+		# # verificação de colisão no eixo X
+		# player_collision_rect.x = int(player_pos[0]) + player_movement[0]
+		# temp[0] = player_collision_rect.x
 
-		for tile in tile_rects:
-			if player_collision_rect.colliderect(tile):
-				if player_movement[0] > 0:
-					# print("RIGHT")
-					temp[0] = tile[0] - player_collision_rect.width
-					player_collision_rect.x = temp[0]
-				elif player_movement[0] < 0:
-					# print("LEFT")
-					temp[0] = tile[0] + tile[2]
-					player_collision_rect.x = temp[0]
+		# for tile in tile_rects:
+		# 	if player_collision_rect.colliderect(tile):
+		# 		if player_movement[0] > 0:
+		# 			# print("RIGHT")
+		# 			temp[0] = tile[0] - player_collision_rect.width
+		# 			player_collision_rect.x = temp[0]
+		# 		elif player_movement[0] < 0:
+		# 			# print("LEFT")
+		# 			temp[0] = tile[0] + tile[2]
+		# 			player_collision_rect.x = temp[0]
 
-		# verificação de colisão no eixo Y
-		player_collision_rect.y = int(player_pos[1]) + int(player_movement[1])
-		temp[1] = player_collision_rect.y
+		# # verificação de colisão no eixo Y
+		# player_collision_rect.y = int(player_pos[1]) + int(player_movement[1])
+		# temp[1] = player_collision_rect.y
 
-		for tile in tile_rects:
-			if player_collision_rect.colliderect(tile):
-				if player_movement[1] > 0:
-					# print("BOTTOM")
-					temp[1] = tile[1] - player_collision_rect.height
-					player_collision_rect.y = temp[1]
+		# for tile in tile_rects:
+		# 	if player_collision_rect.colliderect(tile):
+		# 		if player_movement[1] > 0:
+		# 			# print("BOTTOM")
+		# 			temp[1] = tile[1] - player_collision_rect.height
+		# 			player_collision_rect.y = temp[1]
 
-					air = False
-					player_y_momentum = 0
+		# 			air = False
+		# 			player_y_momentum = 0
 
-				elif player_movement[1] < 0:
-					# print("TOP")
-					temp[1] = tile[1] + tile[3]
-					player_collision_rect.y = temp[1]
+		# 		elif player_movement[1] < 0:
+		# 			# print("TOP")
+		# 			temp[1] = tile[1] + tile[3]
+		# 			player_collision_rect.y = temp[1]
 			
-					player_y_momentum = 0
+		# 			player_y_momentum = 0
 
-		player_pos[0] = temp[0]
-		player_pos[1] = temp[1]
+		# player_pos[0] = temp[0]
+		# player_pos[1] = temp[1]
 
-		if player_collision_rect.colliderect(enemy_collision_rect):
-			print("OUCH")
-		else:
-			print("...")
+		# if player_collision_rect.colliderect(enemy_collision_rect):
+		# 	print("OUCH")
+		# else:
+		# 	print("...")
 
 		# ---------------------------------------------------------------------
 		#  CLEAR SCREEN
 		# ---------------------------------------------------------------------
-		display.fill(AQUA_BLUE_COLOR)
+
+		# limpa a tela com a cor branca
+		display.fill(WHITE_COLOR)
+		# exibe o background da região atual
 		display.blit(bkgs, (0, 0))
 
 		# ---------------------------------------------------------------------
 		#  DRAW GAME MAP
 		# ---------------------------------------------------------------------
-		tile_rects = []
-		y = 0
+		# tile_rects = []
+		# y = 0
 
-		for layer in game_map:
-			x = 0
-			for tile in layer:
+		# for layer in game_map:
+		# 	x = 0
+		# 	for tile in layer:
 	
-				# if tile == '1':
-					# display.blit(boxo_img, (x * 16, y * 16))
+		# 		# if tile == '1':
+		# 			# display.blit(boxo_img, (x * 16, y * 16))
 					
-				if tile == '2':
-					display.blit(barrel_img, (x * 16, y * 16))
+		# 		if tile == '2':
+		# 			display.blit(barrel_img, (x * 16, y * 16))
 
-				if tile == '3':
-					display.blit(boxc_img, (x * 16, y * 16))
+		# 		if tile == '3':
+		# 			display.blit(boxc_img, (x * 16, y * 16))
 
-				if tile == '4':
-					display.blit(cone_img, (x * 16, y * 16))
+		# 		if tile == '4':
+		# 			display.blit(cone_img, (x * 16, y * 16))
 					
-				if tile != '0':
-					tile_rects.append(pygame.Rect(x * 16, y * 16, 16, 16))
+		# 		if tile != '0':
+		# 			tile_rects.append(pygame.Rect(x * 16, y * 16, 16, 16))
 
-				x += 1
-			y += 1
+		# 		x += 1
+		# 	y += 1
 
 		# ---------------------------------------------------------------------
 		#  USER INTERFACE
 		# ---------------------------------------------------------------------
-		if map_region == 1:
-			textRegion = font.render('LOJAS', True, BLACK_COLOR, AQUA_BLUE_COLOR)
-		elif map_region == 2:
-			textRegion = font.render('CAMINHO 2', True, BLACK_COLOR, AQUA_BLUE_COLOR)
-		elif map_region == 3:
-			textRegion = font.render('CAMINHO 1', True, BLACK_COLOR, AQUA_BLUE_COLOR)
-		elif map_region == 4:
-			textRegion = font.render('CASAS', True, BLACK_COLOR, AQUA_BLUE_COLOR)
+		# if map_region == 1:
+		# 	textRegion = font.render('LOJAS', True, BLACK_COLOR, AQUA_BLUE_COLOR)
+		# elif map_region == 2:
+		# 	textRegion = font.render('CAMINHO 2', True, BLACK_COLOR, AQUA_BLUE_COLOR)
+		# elif map_region == 3:
+		# 	textRegion = font.render('CAMINHO 1', True, BLACK_COLOR, AQUA_BLUE_COLOR)
+		# elif map_region == 4:
+		# 	textRegion = font.render('CASAS', True, BLACK_COLOR, AQUA_BLUE_COLOR)
 
-		display.blit(textRegion, (10, 10))
+		# display.blit(textRegion, (10, 10))
 
 		# ---------------------------------------------------------------------
-		#  DRAW FRAME
+		#  DESENHA PERSNAGENS
 		# ---------------------------------------------------------------------
-		# pygame.draw.rect(display, test_object_color, test_object_rect)
+		# if map_region == 3:
+		# 	display.blit(enemy, (enemy_vector.x, enemy_vector.y))
 
-		if map_region == 3:
-			# pygame.draw.rect(display, RED_COLOR, enemy_collision_rect)
-			display.blit(enemy, (enemy_vector.x, enemy_vector.y))
+		# desenha o personagem DO JOGADOR
+		display.blit(player.get_image(), (int(player.get_pos_x()), int(player.get_pos_y())))
 
-		display.blit(player, (int(player_pos[0]), int(player_pos[1])))
-		# screen.blit(text, (5, 10))
+		# ---------------------------------------------------------------------
+		#  ATUALIZA O FRAME
+		# ---------------------------------------------------------------------
 
 		# faz a escala da surface para o tamanho da janela
 		window_surface.blit(pygame.transform.scale(display, (WINDOW_WIDTH_SCREEN, WINDOW_HEIGHT_SCREEN)),(0,0))
 		
-		# update portions of the screen for software displays
+		# atualiza uma porção da janela com a surface
 		# pygame.display.update()
-		# update the full display Surface to the screen
+		# atualiza a Surface para a tela inteira
 		pygame.display.flip()
 
 		clock.tick(FPS)
