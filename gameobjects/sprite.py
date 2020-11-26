@@ -31,6 +31,10 @@ class Sprite(object):
 	def flip_image(self, horizontal, vertical):
 		self.image = pygame.transform.flip(self.image, horizontal, vertical)
 
+	def set_pos(self, x, y):
+		self.pos_x = x
+		self.pos_y = y
+
 	def get_pos_x(self):
 		return self.pos_x
 
@@ -51,6 +55,9 @@ class Sprite(object):
 
 	def get_image(self):
 		return self.image
+
+	def set_lifes(self, lifes):
+		self.lifes = lifes
 
 	def get_lifes(self):
 		return self.lifes
@@ -79,8 +86,6 @@ class Sprite(object):
 				self.pos_x = 304 + self.width
 				self.collision_rect.x = self.pos_x
 				self.speed_x = -random.randrange(1, 4)
-		# elif map_region == 3:
-
 
 	def get_move_intention(self, destiny):
 			pos_vector = Vector2(self.pos_x, self.pos_y)
@@ -93,9 +98,9 @@ class Sprite(object):
 			heading = Vector2.from_points(pos_vector, destination)
 			heading.normalize()
 
-			time_passed_seconds = 60 / 1000.0
+			time_passed_seconds = 120/ 1000.0
 			distance_moved = time_passed_seconds * 5
-			pos_vector += heading * distance_moved 
+			pos_vector += heading * distance_moved
 
 			self.collision_rect.x += int(pos_vector.x)
 			self.collision_rect.y += int(pos_vector.y)
@@ -104,7 +109,29 @@ class Sprite(object):
 			self.collision_rect.x = pos_vector.x
 			self.collision_rect.y = pos_vector.y
 
-			return pos_vector
+	def get_away_intention(self, destiny):
+		pos_vector = Vector2(self.pos_x, self.pos_y)
+
+		# persegue o jogador
+		destination_x = destiny.get_pos_x() - destiny.get_width() / 2.0
+		destination_y = destiny.get_pos_y() - destiny.get_height() / 2.0
+		destination = (destination_x, destination_y)
+
+		heading = Vector2.from_points(pos_vector, destination)
+		heading.normalize()
+
+		time_passed_seconds = 120 / 1000.0
+		distance_moved = time_passed_seconds * 5
+		pos_vector -= heading * distance_moved 
+
+		self.collision_rect.x += int(pos_vector.x)
+		self.collision_rect.y += int(pos_vector.y)
+		self.pos_x = pos_vector.x
+		self.pos_y = pos_vector.y
+		self.collision_rect.x = pos_vector.x
+		self.collision_rect.y = pos_vector.y
+
+		return pos_vector
 
 	def test_collision_border(self, map_region):
 		# -------------------------------------------------------------------------
@@ -161,6 +188,17 @@ class Sprite(object):
 			elif self.pos_y < 0:
 				map_region = 2
 				self.pos_y = 192 - self.height
+		elif map_region == 5:
+			if self.pos_x + self.width > 304:
+				self.pos_x = 304 - self.width
+			elif self.pos_x < 0:
+				self.pos_x = 0
+		
+			if self.pos_y + self.height > 192:
+				self.pos_y = 192 - self.height
+			elif self.pos_y < 0:
+				self.pos_y = 0
+
 
 		self.collision_rect.x = self.pos_x
 		self.collision_rect.y = self.pos_y
@@ -210,3 +248,9 @@ class Sprite(object):
 		else:
 			if enemy.get_safe() == True:
 				enemy.set_safe(False)
+
+	def test_collision(self, sprite):
+		if self.collision_rect.colliderect(sprite.get_collision_rect()):
+			return True
+		else:
+			return False

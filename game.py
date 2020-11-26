@@ -16,7 +16,7 @@ from gameobjects.vector2 import Vector2
 # 1 - MENU
 # 2 - GAME
 # 3 - GAME OVER
-GAME_STATE = 2
+GAME_STATE = 1
 
 # sprite = Sprite("teste")
 # sprite.print_name()
@@ -30,6 +30,7 @@ pygame.init()
 
 # objeto de tratamento de tempo
 clock = pygame.time.Clock()
+start_ticks = pygame.time.get_ticks()
 
 # texto da barra de título da janela
 pygame.display.set_caption("PANDEMIC DELIVERY BOY")
@@ -53,7 +54,7 @@ BLACK_COLOR     = (0,0,0)
 WHITE_COLOR     = (255,255,255)
 
 # Array para armazenar o status de pressionamento das teclas (LEFT, RIGHT, TOP, BOTTOM)
-keys = [False, False, False, False]
+keys = [False, False, False, False, False, False]
 
 # -----------------------------------------------------------------------------
 #  DECLARAÇÃO DE PERSONAGENS E OBJETOS
@@ -71,15 +72,13 @@ enemy1 = Sprite(60, 100, -random.randrange(1, 2), -random.randrange(1, 2), 'asse
 enemy2 = Sprite(random.randrange(40, 70), random.randrange(100, 190), -random.randrange(1, 2), -random.randrange(1, 2), 'assets/enemy2.png')
 enemy3 = Sprite(random.randrange(40, 70), random.randrange(100, 190), -random.randrange(1, 2), -random.randrange(1, 2), 'assets/enemy3.png')
 
-
-enemy = pygame.image.load('assets/enemy1.png')
-enemy.set_colorkey((255,255,255))
-enemy_pos = [100, 100]
-enemy_collision_rect = pygame.Rect(enemy_pos[0], enemy_pos[1], 15, 15)
+# criação dos moradores
+people1 = Sprite(112, 140, 0, 0, 'assets/people1.png')
+people2 = Sprite(32, 64, 0, 0, 'assets/people2.png')
+people3 = Sprite(240, 140, 0, 0, 'assets/people3.png')
 
 heart_img = pygame.image.load('assets/heart.png')
 heart_img.set_colorkey((255,255,255))
-
 boxo_img = pygame.image.load('assets/boxo.png')
 boxc_img = pygame.image.load('assets/boxc.png')
 barrel_img = pygame.image.load('assets/barrel.png')
@@ -87,6 +86,7 @@ cone_img = pygame.image.load('assets/cone.png')
 cone_img.set_colorkey((255,255,255))
 
 gameover_img = pygame.image.load('assets/gameover.png')
+menu_img = pygame.image.load('assets/menu.png')
 
 # -----------------------------------------------------------------------------
 #  DECLARAÇÃO DE PERSONAGENS E OBJETOS
@@ -120,7 +120,7 @@ game_map2 = [
 	['1','0','0','0','0','0','0','4','0','0','4','0','0','4','0','0','4','0','0','1'],
 	['1','0','0','0','0','0','0','0','0','0','4','0','0','0','0','0','4','0','0','1'],
 	['1','0','0','4','0','0','0','0','0','0','4','0','0','0','0','0','4','0','0','1'],
-	['1','0','0','4','4','4','4','4','4','4','4','4','4','4','4','4','4','4','4','1']]
+	['1','4','4','4','4','4','4','4','4','4','4','4','4','4','4','4','4','0','0','1']]
 
 # matriz de objetos colisores da região 3 (caminho 2)
 game_map3 = [
@@ -139,7 +139,7 @@ game_map3 = [
 
 # matriz de objetos colisores da região 4 (moradores - entregas)
 game_map4 = [
-	['3','0','0','2','2','2','2','2','2','2','2','2','2','2','2','2','2','2','2'],
+	['3','2','2','2','2','2','2','2','2','2','2','2','2','2','2','2','2','0','0'],
 	['3','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0'],
 	['3','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0'],
 	['3','0','0','0','0','0','0','1','1','1','1','1','0','0','1','1','1','1','1'],
@@ -153,10 +153,10 @@ game_map4 = [
 	['2','2','2','2','2','2','2','2','2','2','2','2','2','2','2','2','2','2','2']]
 
 # (!) matriz de objetos atual
-game_map = game_map1
+game_map = game_map4
 
 # (!) identificador da região atual
-current_map_region = 1
+current_map_region = 4
 
 # lista de tiles
 collision_tiles_rects = []
@@ -172,6 +172,8 @@ bkgs = bkg_1_img
 
 # Texto de interface
 font = pygame.font.Font('assets/pixelart.ttf', 8)
+font2 = pygame.font.Font('freesansbold.ttf', 20)
+font3 = pygame.font.Font('assets/pixelart.ttf', 20)
 
 # -----------------------------------------------------------------------------
 #  MAIN
@@ -231,6 +233,12 @@ def main():
 					keys[2] = True
 				if event.key == K_DOWN:
 					keys[3] = True
+				if event.key == K_BACKSPACE:
+					print("debug 1")
+					keys[4] = True
+				if event.key == K_RETURN:
+					print("debug 2")
+					keys[5] = True
 
 			# KEYBOARD INPUT (RELEASE)
 			if event.type == KEYUP:
@@ -242,16 +250,48 @@ def main():
 					keys[2] = False
 				if event.key == K_DOWN:
 					keys[3] = False
+				if event.key == K_BACKSPACE:
+					keys[4] = False
+				if event.key == K_RETURN:
+					keys[5] = False
 
-		if GAME_STATE == 2:
+		if GAME_STATE == 1:
+			menu_loop()
+		elif GAME_STATE == 2:
 			game_main_loop()
 		elif GAME_STATE == 3:
 			game_over_loop()
+
+def menu_loop():
+	global GAME_STATE
+	global keys
+	global start_ticks
+	
+	if keys[5]:
+		GAME_STATE = 2
+		start_ticks = pygame.time.get_ticks()
+		return 0
+
+	display.fill(AQUA_BLUE_COLOR)
+	display.blit(menu_img, (0, 0))
+
+	textRegion = font.render('pressione  ENTER para iniciar', True, BLACK_COLOR, WHITE_COLOR)
+	display.blit(textRegion, (75, 160))
+
+	window_surface.blit(pygame.transform.scale(display, (WINDOW_WIDTH_SCREEN, WINDOW_HEIGHT_SCREEN)),(0,0))
+	pygame.display.flip()
+	clock.tick(FPS)
+
+
 
 def game_main_loop():
 	global current_map_region
 	global collision_tiles_rects
 	global GAME_STATE
+	global clock
+	global font2
+
+	seconds = (pygame.time.get_ticks() - start_ticks) / 1000
 
 	# ---------------------------------------------------------------------
 	#  PLAYER INPUT
@@ -280,6 +320,9 @@ def game_main_loop():
 		player.set_image('assets/p1.png')
 		player_movement[1] = player.get_speed_y()
 
+	# ESPAÇO
+	# if keys[4]
+
 	# ---------------------------------------------------------------------
 	#  ATUALIZANDO A POSIÇÃO DOS OBJETOS
 	# ---------------------------------------------------------------------
@@ -291,9 +334,15 @@ def game_main_loop():
 		car3.update(1)
 		# obter o vetor para perseguir o jogador
 		enemy1.get_move_intention(player)
+		enemy1.get_away_intention(enemy2)
 		enemy2.get_move_intention(player)
+		enemy2.get_away_intention(enemy3)
 		enemy3.get_move_intention(player)
 
+		enemy1.test_collision_border(5)
+		enemy2.test_collision_border(5)
+		enemy3.test_collision_border(5)
+	
 	# ---------------------------------------------------------------------
 	#  TESTE DE COLISÃO COM A BORDA, TILES e INIMIGOS
 	# ---------------------------------------------------------------------
@@ -329,11 +378,6 @@ def game_main_loop():
 		player.test_collision_enemy(enemy1)
 		player.test_collision_enemy(enemy2)
 		player.test_collision_enemy(enemy3)
-
-	# if player_collision_rect.colliderect(enemy_collision_rect):
-	# 	print("OUCH")
-	# else:
-	# 	print("...")
 
 	# ---------------------------------------------------------------------
 	#  CLEAR SCREEN
@@ -380,6 +424,10 @@ def game_main_loop():
 		display.blit(enemy1.get_image(), (int(enemy1.get_pos_x()), int(enemy1.get_pos_y())))
 		display.blit(enemy2.get_image(), (int(enemy2.get_pos_x()), int(enemy2.get_pos_y())))
 		display.blit(enemy3.get_image(), (int(enemy3.get_pos_x()), int(enemy3.get_pos_y())))
+	elif current_map_region == 4:
+		display.blit(people1.get_image(), (int(people1.get_pos_x()), int(people1.get_pos_y())))
+		display.blit(people2.get_image(), (int(people2.get_pos_x()), int(people2.get_pos_y())))
+		display.blit(people3.get_image(), (int(people3.get_pos_x()), int(people3.get_pos_y())))
 
 	# if map_region == 3:
 	# 	display.blit(enemy, (enemy_vector.x, enemy_vector.y))
@@ -392,13 +440,19 @@ def game_main_loop():
 	# ---------------------------------------------------------------------
 	#  USER INTERFACE
 	# ---------------------------------------------------------------------
-	# if map_region == 1:
+	# print("seconds: " + str(int(seconds)))
+	counter_text = font2.render(str(int(seconds)), True, BLACK_COLOR, WHITE_COLOR)
+	counter_text.set_colorkey((255,255,255))
+
+	display.blit(counter_text, (270, 10))
+
+	# if current_map_region == 1:
 	# 	textRegion = font.render('LOJAS', True, BLACK_COLOR, AQUA_BLUE_COLOR)
-	# elif map_region == 2:
+	# elif current_map_region == 2:
 	# 	textRegion = font.render('CAMINHO 2', True, BLACK_COLOR, AQUA_BLUE_COLOR)
-	# elif map_region == 3:
+	# elif current_map_region == 3:
 	# 	textRegion = font.render('CAMINHO 1', True, BLACK_COLOR, AQUA_BLUE_COLOR)
-	# elif map_region == 4:
+	# elif current_map_region == 4:
 	# 	textRegion = font.render('CASAS', True, BLACK_COLOR, AQUA_BLUE_COLOR)
 
 	# display.blit(textRegion, (10, 10))
@@ -431,9 +485,42 @@ def game_main_loop():
 		GAME_STATE = 3
 		return 0
 
+	if int(seconds) > 90:
+		GAME_STATE = 3
+		return 0
+
 def game_over_loop():
+	global player
+	global GAME_STATE
+	global game_map
+	global current_map_region
+	global keys
+	global start_ticks
+
+	if keys[5]:
+		player.set_pos(50, 150)
+		game_map = game_map4
+		current_map_region = 4
+		player.set_lifes(6)
+		start_ticks = pygame.time.get_ticks()
+		GAME_STATE = 2
+		return 0
+
 	display.fill(AQUA_BLUE_COLOR)
 	display.blit(gameover_img, (0, 0))
+
+	if player.get_lifes() == 0:
+		textRegion = font3.render('VOCE PERDEU', True, WHITE_COLOR, BLACK_COLOR)
+	else:
+		textRegion = font3.render('SEUS PONTOS: ', True, WHITE_COLOR, BLACK_COLOR)
+
+	textRegion.set_colorkey((0,0,0))
+
+	display.blit(textRegion, (80, 80))
+	
+	textRegion2 = font.render('Pressione  ENTER para jogar de novo', True, WHITE_COLOR, BLACK_COLOR)
+	textRegion2.set_colorkey((0,0,0))
+	display.blit(textRegion2, (55, 160))
 
 	window_surface.blit(pygame.transform.scale(display, (WINDOW_WIDTH_SCREEN, WINDOW_HEIGHT_SCREEN)),(0,0))
 	pygame.display.flip()
