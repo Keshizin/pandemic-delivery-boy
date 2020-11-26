@@ -77,6 +77,9 @@ people1 = Sprite(112, 140, 0, 0, 'assets/people1.png')
 people2 = Sprite(32, 64, 0, 0, 'assets/people2.png')
 people3 = Sprite(240, 140, 0, 0, 'assets/people3.png')
 
+people4 = Sprite(17, 20, 0, 0, 'assets/people4.png')
+people5 = Sprite(112, 20, 0, 0, 'assets/people5.png')
+
 heart_img = pygame.image.load('assets/heart.png')
 heart_img.set_colorkey((255,255,255))
 boxo_img = pygame.image.load('assets/boxo.png')
@@ -172,7 +175,7 @@ bkgs = bkg_1_img
 
 # Texto de interface
 font = pygame.font.Font('assets/pixelart.ttf', 8)
-font2 = pygame.font.Font('freesansbold.ttf', 20)
+font2 = pygame.font.Font('assets/pixelart.ttf', 12)
 font3 = pygame.font.Font('assets/pixelart.ttf', 20)
 
 # -----------------------------------------------------------------------------
@@ -233,7 +236,7 @@ def main():
 					keys[2] = True
 				if event.key == K_DOWN:
 					keys[3] = True
-				if event.key == K_BACKSPACE:
+				if event.key == K_1:
 					print("debug 1")
 					keys[4] = True
 				if event.key == K_RETURN:
@@ -250,7 +253,7 @@ def main():
 					keys[2] = False
 				if event.key == K_DOWN:
 					keys[3] = False
-				if event.key == K_BACKSPACE:
+				if event.key == K_1:
 					keys[4] = False
 				if event.key == K_RETURN:
 					keys[5] = False
@@ -282,14 +285,13 @@ def menu_loop():
 	pygame.display.flip()
 	clock.tick(FPS)
 
-
-
 def game_main_loop():
 	global current_map_region
 	global collision_tiles_rects
 	global GAME_STATE
 	global clock
 	global font2
+	global keys
 
 	seconds = (pygame.time.get_ticks() - start_ticks) / 1000
 
@@ -321,7 +323,45 @@ def game_main_loop():
 		player_movement[1] = player.get_speed_y()
 
 	# ESPAÇO
-	# if keys[4]
+	if keys[4]:
+		if current_map_region == 4:
+			if player.test_collision(people1):
+				print("colisao: people1")
+				if player.get_pedido() == 0:
+					player.set_pedido(1)
+
+				if player.get_pedido() == 2:
+					player.set_pedido(0)
+					player.add_score()
+
+			if player.test_collision(people2):
+				print("colisao: people2")
+				if player.get_pedido() == 0:
+					player.set_pedido(1)
+
+				if player.get_pedido() == 2:
+					player.set_pedido(0)
+					player.add_score()
+
+			if player.test_collision(people3):
+				print("colisao: people3")
+				if player.get_pedido() == 0:
+					player.set_pedido(1)
+
+				if player.get_pedido() == 2:
+					player.set_pedido(0)
+					player.add_score()
+
+		elif current_map_region == 1:
+			if player.test_collision(people4):
+				print("colisao: people4")
+				if player.get_pedido() == 1:
+					player.set_pedido(2)
+
+			if player.test_collision(people5):
+				print("colisao: people5")
+				if player.get_pedido() == 1:
+					player.set_pedido(2)
 
 	# ---------------------------------------------------------------------
 	#  ATUALIZANDO A POSIÇÃO DOS OBJETOS
@@ -441,10 +481,16 @@ def game_main_loop():
 	#  USER INTERFACE
 	# ---------------------------------------------------------------------
 	# print("seconds: " + str(int(seconds)))
-	counter_text = font2.render(str(int(seconds)), True, BLACK_COLOR, WHITE_COLOR)
-	counter_text.set_colorkey((255,255,255))
+	counter_text = font2.render("tempo " + str(int(seconds)), True, WHITE_COLOR, BLACK_COLOR)
+	counter_text.set_colorkey((0,0,0))
+	score_text = font2.render("pontos " + str(player.get_score()), True, WHITE_COLOR, BLACK_COLOR)
+	score_text.set_colorkey((0,0,0))
+	pedido_text = font2.render("pedido " + str(player.get_pedido()), True, WHITE_COLOR, BLACK_COLOR)
+	pedido_text.set_colorkey((0,0,0))
 
-	display.blit(counter_text, (270, 10))
+	display.blit(counter_text, (240, 10))
+	display.blit(score_text, (160, 10))
+	display.blit(pedido_text, (160, 22))
 
 	# if current_map_region == 1:
 	# 	textRegion = font.render('LOJAS', True, BLACK_COLOR, AQUA_BLUE_COLOR)
@@ -502,6 +548,7 @@ def game_over_loop():
 		game_map = game_map4
 		current_map_region = 4
 		player.set_lifes(6)
+		player.set_scores(0)
 		start_ticks = pygame.time.get_ticks()
 		GAME_STATE = 2
 		return 0
@@ -512,7 +559,7 @@ def game_over_loop():
 	if player.get_lifes() == 0:
 		textRegion = font3.render('VOCE PERDEU', True, WHITE_COLOR, BLACK_COLOR)
 	else:
-		textRegion = font3.render('SEUS PONTOS: ', True, WHITE_COLOR, BLACK_COLOR)
+		textRegion = font3.render('SEUS PONTOS ' + str(player.get_scores()), True, WHITE_COLOR, BLACK_COLOR)
 
 	textRegion.set_colorkey((0,0,0))
 

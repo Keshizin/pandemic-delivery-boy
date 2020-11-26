@@ -20,6 +20,8 @@ class Sprite(object):
 		self.collision_rect = pygame.Rect(self.pos_x, self.pos_y, self.width, self.height)
 		self.lifes = 6
 		self.safe = False
+		self.score = 0
+		self.pedido = 0
 
 	def set_image(self, filename):
 		self.image = pygame.image.load(filename)
@@ -31,9 +33,24 @@ class Sprite(object):
 	def flip_image(self, horizontal, vertical):
 		self.image = pygame.transform.flip(self.image, horizontal, vertical)
 
+	def set_pedido(self, pedido):
+		self.pedido = pedido
+
+	def get_pedido(self):
+		return self.pedido
+
 	def set_pos(self, x, y):
 		self.pos_x = x
 		self.pos_y = y
+
+	def set_score(self, score):
+		self.score = score
+
+	def add_score(self):
+		self.score += 10
+
+	def get_score(self):
+		return self.score
 
 	def get_pos_x(self):
 		return self.pos_x
