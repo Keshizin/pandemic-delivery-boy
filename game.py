@@ -548,7 +548,7 @@ def game_over_loop():
 		game_map = game_map4
 		current_map_region = 4
 		player.set_lifes(6)
-		player.set_scores(0)
+		player.set_score(0)
 		start_ticks = pygame.time.get_ticks()
 		GAME_STATE = 2
 		return 0
