@@ -236,11 +236,9 @@ def main():
 					keys[2] = True
 				if event.key == K_DOWN:
 					keys[3] = True
-				if event.key == K_1:
-					print("debug 1")
+				if event.key == K_SPACE:
 					keys[4] = True
 				if event.key == K_RETURN:
-					print("debug 2")
 					keys[5] = True
 
 			# KEYBOARD INPUT (RELEASE)
@@ -253,7 +251,7 @@ def main():
 					keys[2] = False
 				if event.key == K_DOWN:
 					keys[3] = False
-				if event.key == K_1:
+				if event.key == K_SPACE:
 					keys[4] = False
 				if event.key == K_RETURN:
 					keys[5] = False
@@ -278,7 +276,7 @@ def menu_loop():
 	display.fill(AQUA_BLUE_COLOR)
 	display.blit(menu_img, (0, 0))
 
-	textRegion = font.render('pressione  ENTER para iniciar', True, BLACK_COLOR, WHITE_COLOR)
+	textRegion = font.render('pressione  ENTER  para iniciar', True, BLACK_COLOR, WHITE_COLOR)
 	display.blit(textRegion, (75, 160))
 
 	window_surface.blit(pygame.transform.scale(display, (WINDOW_WIDTH_SCREEN, WINDOW_HEIGHT_SCREEN)),(0,0))
@@ -326,7 +324,6 @@ def game_main_loop():
 	if keys[4]:
 		if current_map_region == 4:
 			if player.test_collision(people1):
-				print("colisao: people1")
 				if player.get_pedido() == 0:
 					player.set_pedido(1)
 
@@ -335,7 +332,6 @@ def game_main_loop():
 					player.add_score()
 
 			if player.test_collision(people2):
-				print("colisao: people2")
 				if player.get_pedido() == 0:
 					player.set_pedido(1)
 
@@ -344,7 +340,6 @@ def game_main_loop():
 					player.add_score()
 
 			if player.test_collision(people3):
-				print("colisao: people3")
 				if player.get_pedido() == 0:
 					player.set_pedido(1)
 
@@ -354,12 +349,10 @@ def game_main_loop():
 
 		elif current_map_region == 1:
 			if player.test_collision(people4):
-				print("colisao: people4")
 				if player.get_pedido() == 1:
 					player.set_pedido(2)
 
 			if player.test_collision(people5):
-				print("colisao: people5")
 				if player.get_pedido() == 1:
 					player.set_pedido(2)
 
